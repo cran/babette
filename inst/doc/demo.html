@@ -8,11 +8,11 @@
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Richèl J.C. Bilderbeek" />
 
-<meta name="date" content="2019-12-31" />
+<meta name="date" content="2020-02-01" />
 
 <title>babette demo</title>
 
@@ -117,9 +117,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -288,7 +285,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -303,7 +301,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">babette demo</h1>
 <h4 class="author">Richèl J.C. Bilderbeek</h4>
-<h4 class="date">2019-12-31</h4>
+<h4 class="date">2020-02-01</h4>
 
 
 
@@ -323,59 +321,68 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </ul>
 <p>In all cases, this is done for a short MCMC chain length of 10K:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">inference_model &lt;-<span class="st"> </span><span class="kw">create_test_inference_model</span>()</a>
-<a class="sourceLine" id="cb2-2" title="2">mcmc &lt;-<span class="st"> </span>inference_model<span class="op">$</span>mcmc</a>
-<a class="sourceLine" id="cb2-3" title="3">sample_interval &lt;-<span class="st"> </span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>log_every</a></code></pre></div>
+<a class="sourceLine" id="cb2-2" title="2">inference_model<span class="op">$</span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>filename &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
+<a class="sourceLine" id="cb2-3" title="3">inference_model<span class="op">$</span>mcmc<span class="op">$</span>treelog<span class="op">$</span>filename &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
+<a class="sourceLine" id="cb2-4" title="4">inference_model<span class="op">$</span>mcmc<span class="op">$</span>screenlog<span class="op">$</span>filename &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
+<a class="sourceLine" id="cb2-5" title="5">mcmc &lt;-<span class="st"> </span>inference_model<span class="op">$</span>mcmc</a>
+<a class="sourceLine" id="cb2-6" title="6">sample_interval &lt;-<span class="st"> </span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>log_every</a></code></pre></div>
+<p>Also, in all cases, we use the same BEAST2 options:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>(</a>
+<a class="sourceLine" id="cb3-2" title="2">  <span class="dt">input_filename =</span> <span class="kw">tempfile</span>(),</a>
+<a class="sourceLine" id="cb3-3" title="3">  <span class="dt">output_state_filename =</span> <span class="kw">tempfile</span>()</a>
+<a class="sourceLine" id="cb3-4" title="4">)</a></code></pre></div>
 </div>
 <div id="let-babette-run-beast2" class="section level2">
 <h2>Let <code>babette</code> run ‘BEAST2’</h2>
 <p>For an alignment, we’ll use a <code>babette</code> example alignment.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb3-2" title="2">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
-<a class="sourceLine" id="cb3-3" title="3">    <span class="dt">fasta_filename =</span> <span class="kw">get_babette_path</span>(<span class="st">&quot;anthus_aco_sub.fas&quot;</span>),</a>
-<a class="sourceLine" id="cb3-4" title="4">    <span class="dt">inference_model =</span> inference_model</a>
-<a class="sourceLine" id="cb3-5" title="5">  )</a>
-<a class="sourceLine" id="cb3-6" title="6">}</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb4-2" title="2">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
+<a class="sourceLine" id="cb4-3" title="3">    <span class="dt">fasta_filename =</span> <span class="kw">get_babette_path</span>(<span class="st">&quot;anthus_aco_sub.fas&quot;</span>),</a>
+<a class="sourceLine" id="cb4-4" title="4">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb4-5" title="5">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb4-6" title="6">  )</a>
+<a class="sourceLine" id="cb4-7" title="7">}</a></code></pre></div>
 </div>
 <div id="plot-the-posterior-estimates" class="section level2">
 <h2>Plot the posterior estimates</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb4-2" title="2">  <span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb4-3" title="3">  p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(</a>
-<a class="sourceLine" id="cb4-4" title="4">    <span class="dt">data =</span> out<span class="op">$</span>estimates,</a>
-<a class="sourceLine" id="cb4-5" title="5">    <span class="kw">aes</span>(<span class="dt">x =</span> Sample)</a>
-<a class="sourceLine" id="cb4-6" title="6">  ) </a>
-<a class="sourceLine" id="cb4-7" title="7">  p <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> TreeHeight), <span class="dt">color =</span> <span class="st">&quot;green&quot;</span>)</a>
-<a class="sourceLine" id="cb4-8" title="8">  p <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> YuleModel), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb4-9" title="9">  p <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> birthRate), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb4-10" title="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb5-2" title="2">  <span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb5-3" title="3">  p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(</a>
+<a class="sourceLine" id="cb5-4" title="4">    <span class="dt">data =</span> out<span class="op">$</span>estimates,</a>
+<a class="sourceLine" id="cb5-5" title="5">    <span class="kw">aes</span>(<span class="dt">x =</span> Sample)</a>
+<a class="sourceLine" id="cb5-6" title="6">  ) </a>
+<a class="sourceLine" id="cb5-7" title="7">  p <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> TreeHeight), <span class="dt">color =</span> <span class="st">&quot;green&quot;</span>)</a>
+<a class="sourceLine" id="cb5-8" title="8">  p <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> YuleModel), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb5-9" title="9">  p <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> birthRate), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb5-10" title="10">}</a></code></pre></div>
 </div>
 <div id="show-the-effective-sample-sizes-ess" class="section level2">
 <h2>Show the effective sample sizes (ESS)</h2>
 <p>Effective sample sizes, with 20% burn-in removed:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb5-2" title="2">  traces &lt;-<span class="st"> </span><span class="kw">remove_burn_ins</span>(</a>
-<a class="sourceLine" id="cb5-3" title="3">    <span class="dt">traces =</span> out<span class="op">$</span>estimates, </a>
-<a class="sourceLine" id="cb5-4" title="4">    <span class="dt">burn_in_fraction =</span> <span class="fl">0.2</span></a>
-<a class="sourceLine" id="cb5-5" title="5">  )</a>
-<a class="sourceLine" id="cb5-6" title="6">  esses &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">calc_esses</span>(traces, <span class="dt">sample_interval =</span> sample_interval))</a>
-<a class="sourceLine" id="cb5-7" title="7">  <span class="kw">colnames</span>(esses) &lt;-<span class="st"> &quot;ESS&quot;</span></a>
-<a class="sourceLine" id="cb5-8" title="8">  knitr<span class="op">::</span><span class="kw">kable</span>(esses)</a>
-<a class="sourceLine" id="cb5-9" title="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb6-2" title="2">  traces &lt;-<span class="st"> </span><span class="kw">remove_burn_ins</span>(</a>
+<a class="sourceLine" id="cb6-3" title="3">    <span class="dt">traces =</span> out<span class="op">$</span>estimates, </a>
+<a class="sourceLine" id="cb6-4" title="4">    <span class="dt">burn_in_fraction =</span> <span class="fl">0.2</span></a>
+<a class="sourceLine" id="cb6-5" title="5">  )</a>
+<a class="sourceLine" id="cb6-6" title="6">  esses &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">calc_esses</span>(traces, <span class="dt">sample_interval =</span> sample_interval))</a>
+<a class="sourceLine" id="cb6-7" title="7">  <span class="kw">colnames</span>(esses) &lt;-<span class="st"> &quot;ESS&quot;</span></a>
+<a class="sourceLine" id="cb6-8" title="8">  knitr<span class="op">::</span><span class="kw">kable</span>(esses)</a>
+<a class="sourceLine" id="cb6-9" title="9">}</a></code></pre></div>
 <p>For a reliable inference, use an ESS of at least 200.</p>
 </div>
 <div id="show-the-summary-statistics" class="section level2">
 <h2>Show the summary statistics</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb6-2" title="2">  sum_stats &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">calc_summary_stats</span>(traces<span class="op">$</span>posterior, <span class="dt">sample_interval =</span> sample_interval))</a>
-<a class="sourceLine" id="cb6-3" title="3">  <span class="kw">colnames</span>(sum_stats) &lt;-<span class="st"> &quot;Statistic&quot;</span></a>
-<a class="sourceLine" id="cb6-4" title="4">  knitr<span class="op">::</span><span class="kw">kable</span>(sum_stats)</a>
-<a class="sourceLine" id="cb6-5" title="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb7-2" title="2">  sum_stats &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">calc_summary_stats</span>(traces<span class="op">$</span>posterior, <span class="dt">sample_interval =</span> sample_interval))</a>
+<a class="sourceLine" id="cb7-3" title="3">  <span class="kw">colnames</span>(sum_stats) &lt;-<span class="st"> &quot;Statistic&quot;</span></a>
+<a class="sourceLine" id="cb7-4" title="4">  knitr<span class="op">::</span><span class="kw">kable</span>(sum_stats)</a>
+<a class="sourceLine" id="cb7-5" title="5">}</a></code></pre></div>
 </div>
 <div id="plot-the-posterior-phylogenies" class="section level2">
 <h2>Plot the posterior phylogenies</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb7-2" title="2">  <span class="kw">plot_densitree</span>(out<span class="op">$</span>anthus_aco_sub_trees, <span class="dt">width =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb7-3" title="3">}</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb8-2" title="2">  <span class="kw">plot_densitree</span>(out<span class="op">$</span>anthus_aco_sub_trees, <span class="dt">width =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb8-3" title="3">}</a></code></pre></div>
 </div>
 
 

@@ -8,11 +8,11 @@
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Richèl J.C. Bilderbeek" />
 
-<meta name="date" content="2019-12-31" />
+<meta name="date" content="2020-02-01" />
 
 <title>babette: Step by Step</title>
 
@@ -117,9 +117,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -288,7 +285,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -303,7 +301,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">babette: Step by Step</h1>
 <h4 class="author">Richèl J.C. Bilderbeek</h4>
-<h4 class="date">2019-12-31</h4>
+<h4 class="date">2020-02-01</h4>
 
 
 
@@ -320,7 +318,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="create-a-beast2-input-file" class="section level2">
 <h2>Create a ‘BEAST2’ input file</h2>
 <p>This step is commonly done using BEAUti. With <code>babette</code>, this can be done as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">beast2_input_file &lt;-<span class="st"> </span>beastier<span class="op">::</span><span class="kw">create_temp_input_filename</span>()</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">beast2_input_file &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">create_beast2_input_file</span>(</a>
 <a class="sourceLine" id="cb3-3" title="3">  <span class="kw">get_babette_path</span>(<span class="st">&quot;anthus_aco.fas&quot;</span>),</a>
 <a class="sourceLine" id="cb3-4" title="4">  <span class="dt">output_filename =</span> beast2_input_file,</a>

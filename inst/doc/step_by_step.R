@@ -12,7 +12,7 @@ mcmc <- create_test_mcmc()
 sample_interval <- mcmc$tracelog$log_every
 
 ## -----------------------------------------------------------------------------
-beast2_input_file <- beastier::create_temp_input_filename()
+beast2_input_file <- tempfile()
 create_beast2_input_file(
   get_babette_path("anthus_aco.fas"),
   output_filename = beast2_input_file,

@@ -19,20 +19,52 @@ names(inference_model)
 ## -----------------------------------------------------------------------------
 print(inference_model$mcmc$chain_length)
 
+## ----cache=TRUE---------------------------------------------------------------
+if (is_beast2_installed()) {
+  out <- bbt_run_from_model(
+   fasta_filename = fasta_filename,
+   inference_model = inference_model
+  )
+}
+
 ## -----------------------------------------------------------------------------
 inference_model <- create_test_inference_model(
   site_model = create_jc69_site_model()
 )
+
+## ----cache=TRUE---------------------------------------------------------------
+if (is_beast2_installed()) {
+  out <- bbt_run_from_model(
+    fasta_filename = fasta_filename,
+    inference_model = inference_model
+  )
+}
 
 ## -----------------------------------------------------------------------------
 inference_model <- create_test_inference_model(
   clock_model = create_strict_clock_model()
 )
 
+## ----cache=TRUE---------------------------------------------------------------
+if (is_beast2_installed()) {
+  out <- bbt_run_from_model(
+    fasta_filename = fasta_filename,
+    inference_model = inference_model
+  )
+}
+
 ## -----------------------------------------------------------------------------
 inference_model <- create_test_inference_model(
   tree_prior = create_yule_tree_prior()
 )
+
+## ----cache=TRUE---------------------------------------------------------------
+if (is_beast2_installed()) {
+  out <- bbt_run_from_model(
+    fasta_filename = fasta_filename,
+    inference_model = inference_model
+  )
+}
 
 ## -----------------------------------------------------------------------------
 mrca_prior <- create_mrca_prior(
@@ -59,4 +91,12 @@ inference_model <- create_test_inference_model(
   mrca_prior = mrca_prior
 )
 
+
+## ----cache=TRUE---------------------------------------------------------------
+if (is_beast2_installed()) {
+  out <- bbt_run_from_model(
+    fasta_filename = fasta_filename,
+    inference_model = inference_model
+  )
+}
 
