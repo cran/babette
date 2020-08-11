@@ -80,7 +80,7 @@ plot_densitree(posterior$anthus_aco_sub_trees, width = 2)
 if (is_beast2_installed()) {
   posterior <- bbt_run(
     fasta_filename = fasta_filename,
-    tree_prior = create_bd_tree_prior(), 
+    tree_prior = create_bd_tree_prior(),
     mcmc = mcmc
   )
 }
@@ -125,7 +125,7 @@ if (is_beast2_installed()) {
     fasta_filename = fasta_filename,
     clock_model = create_strict_clock_model(
       clock_rate_param = 0.5
-    ), 
+    ),
     mcmc = mcmc
   )
 }

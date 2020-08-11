@@ -1,0 +1,55 @@
+#
+#model:
+#
+#<?xml version="1.0" encoding="UTF-8" standalone="no"?><input id="posterior" spec="beast.core.util.CompoundDistribution">
+#    <distribution id="prior" spec="beast.core.util.CompoundDistribution">
+#        <distribution id="BayesianSkyline.t:Felinecoronavirus_Envelope_1" spec="beast.evolution.tree.coalescent.BayesianSkyline">
+#            <parameter dimension="5" id="bPopSizes.t:Felinecoronavirus_Envelope_1" lower="0.0" name="popSizes" spec="beast.core.parameter.RealParameter" upper="380000.0">380.0</parameter>
+#            <groupSizes dimension="5" id="bGroupSizes.t:Felinecoronavirus_Envelope_1" spec="beast.core.parameter.IntegerParameter">1</groupSizes>
+#            <treeIntervals id="BSPTreeIntervals.t:Felinecoronavirus_Envelope_1" spec="beast.evolution.tree.coalescent.TreeIntervals">
+#                <tree id="Tree.t:Felinecoronavirus_Envelope_1" spec="beast.evolution.tree.Tree">
+#                    <taxonset id="TaxonSet.Felinecoronavirus_Envelope_1" spec="beast.evolution.alignment.TaxonSet">
+#                    </taxonset>
+#                </tree>
+#            </treeIntervals>
+#        </distribution>
+#        <distribution id="MarkovChainedPopSizes.t:Felinecoronavirus_Envelope_1" jeffreys="true" parameter="@bPopSizes.t:Felinecoronavirus_Envelope_1" spec="beast.math.distributions.MarkovChainDistribution"/>
+#        <prior id="ucldStdevPrior.c:Felinecoronavirus_Envelope_1" name="distribution">
+#            <parameter id="ucldStdev.c:Felinecoronavirus_Envelope_1" lower="0.0" name="x" spec="beast.core.parameter.RealParameter">0.1</parameter>
+#            <Gamma id="Gamma.0" name="distr">
+#                <parameter estimate="false" id="RealParameter.0" name="alpha" spec="beast.core.parameter.RealParameter">0.5396</parameter>
+#                <parameter estimate="false" id="RealParameter.1" name="beta" spec="beast.core.parameter.RealParameter">0.3819</parameter>
+#            </Gamma>
+#        </prior>
+#    </distribution>
+#    <distribution id="likelihood" spec="beast.core.util.CompoundDistribution" useThreads="true">
+#        <distribution data="@Felinecoronavirus_Envelope_1" id="treeLikelihood.Felinecoronavirus_Envelope_1" spec="beast.evolution.likelihood.ThreadedTreeLikelihood" tree="@Tree.t:Felinecoronavirus_Envelope_1">
+#            <siteModel id="SiteModel.s:Felinecoronavirus_Envelope_1" spec="beast.evolution.sitemodel.SiteModel">
+#                <parameter estimate="false" id="mutationRate.s:Felinecoronavirus_Envelope_1" name="mutationRate" spec="beast.core.parameter.RealParameter">1.0</parameter>
+#                <parameter estimate="false" id="gammaShape.s:Felinecoronavirus_Envelope_1" name="shape" spec="beast.core.parameter.RealParameter">1.0</parameter>
+#                <parameter estimate="false" id="proportionInvariant.s:Felinecoronavirus_Envelope_1" lower="0.0" name="proportionInvariant" spec="beast.core.parameter.RealParameter" upper="1.0">0.0</parameter>
+#                <substModel id="JC69.s:Felinecoronavirus_Envelope_1" spec="beast.evolution.substitutionmodel.JukesCantor"/>
+#            </siteModel>
+#            <branchRateModel id="RelaxedClock.c:Felinecoronavirus_Envelope_1" spec="beast.evolution.branchratemodel.UCRelaxedClockModel" tree="@Tree.t:Felinecoronavirus_Envelope_1">
+#                <LogNormal S="@ucldStdev.c:Felinecoronavirus_Envelope_1" id="LogNormalDistributionModel.c:Felinecoronavirus_Envelope_1" meanInRealSpace="true" name="distr">
+#                    <parameter estimate="false" id="RealParameter.4" lower="0.0" name="M" spec="beast.core.parameter.RealParameter" upper="1.0">1.0</parameter>
+#                </LogNormal>
+#                <rateCategories dimension="58" id="rateCategories.c:Felinecoronavirus_Envelope_1" spec="beast.core.parameter.IntegerParameter">1</rateCategories>
+#                <parameter estimate="false" id="ucldMean.c:Felinecoronavirus_Envelope_1" name="clock.rate" spec="beast.core.parameter.RealParameter">0.001</parameter>
+#            </branchRateModel>
+#        </distribution>
+#    </distribution>
+#</input>
+#
+Sample	posterior	likelihood	prior	treeLikelihood	TreeHeight	ucldStdev	rate.mean	rate.variance	rate.coefficientOfVariation	BayesianSkyline	bPopSizes.1	bPopSizes.2	bPopSizes.3	bPopSizes.4	bPopSizes.5	bGroupSizes.1	bGroupSizes.2	bGroupSizes.3	bGroupSizes.4	bGroupSizes.5
+0	-3240.841787268118	-3035.5847245023215	-205.25706276579643	-3035.5847245023215	2.213233693906115	0.1	0.0010193686735280939	1.1434296238719105E-8	0.10752202220604151	-172.37557064731507	380.0	380.0	380.0	380.0	380.0	6	6	6	6	5
+1000	-1775.444047966815	-1577.300375027788	-198.14367293902714	-1577.300375027788	126.63977963928603	0.0013995397535097038	0.001000072191126541	1.7483773983330976E-12	0.0013222399605811656	-171.17567571654607	306.60039562279246	211.913129652426	147.80535021571188	165.94150489294682	97.05130619747995	3	7	1	12	6
+2000	-1618.7048344897025	-1404.9412561360355	-213.76357835366707	-1404.9412561360355	71.49649195832795	0.005350754269804074	0.001000169897289784	3.3394932927625475E-11	0.0057752938975825525	-185.88494036728392	459.762994930444	163.58302094742834	73.14903745588812	166.61517780343434	74.34631495935774	7	4	1	13	4
+3000	-1516.674131911359	-1317.5559049177975	-199.1182269935613	-1317.5559049177975	54.243190827126995	0.027404875714910775	9.984746549859022E-4	8.262569777812691E-10	0.02867833503831248	-173.2604002329714	301.69245537507345	62.59615590270493	66.58767177751224	74.06337547794364	75.6013661315854	13	1	1	11	3
+4000	-1454.6199602094482	-1257.9771450796916	-196.6428151297566	-1257.9771450796916	48.79454790134713	0.05660546884629373	9.963314629319096E-4	2.8681340787360995E-9	0.053758122640078544	-167.99611634477677	243.94617119064682	56.78020523463347	189.20527236520115	32.935090253041075	76.81010811431847	20	2	1	5	1
+5000	-1379.790981284057	-1180.0272699340098	-199.763711350047	-1180.0272699340098	52.27999955687438	0.11568753435401721	9.785800195794257E-4	1.3942658696927148E-8	0.12019581585547662	-170.57059349416437	424.89612334643624	136.79669347048656	90.82418981118022	31.86534024383025	113.91695341030474	18	1	2	7	1
+6000	-1366.4921570799836	-1173.0730213108698	-193.4191357691139	-1173.0730213108698	52.68944064154607	0.32558161645088407	9.470740139982198E-4	9.319802811123323E-8	0.3336401595310833	-168.78239767372622	132.3354344701477	104.582383168046	40.95949511564632	28.59320638404124	27.321397833082038	14	4	2	5	4
+7000	-1370.7827289613526	-1180.2061074207113	-190.57662154064133	-1180.2061074207113	42.610670416383144	0.038790900430465	0.0010009512606278432	1.270689637234513E-9	0.035749656931349016	-165.26256411594554	258.06581955067793	227.58521175896945	65.75640912038371	40.4646944998616	21.169330048344737	16	3	2	7	1
+8000	-1324.6492771258047	-1129.5715682597854	-195.07770886601932	-1129.5715682597854	41.21946078454527	0.0106216033502569	0.0010007024229290724	1.1428724236010919E-10	0.010655624358206797	-167.44360251705206	318.2682626326294	302.17639242020135	47.273851036547136	16.104901504019917	70.88435392842182	20	1	1	6	1
+9000	-1314.9700668660512	-1130.236560424667	-184.73350644138415	-1130.236560424667	41.47219234103865	0.010214432135892909	0.0010019079846087648	8.92457120715225E-11	0.00942660011350091	-161.70708828206068	237.19990610639337	37.49342925952425	53.410477029638315	21.177644147040027	33.02014722111647	17	2	1	8	1
+10000	-1310.9625818237537	-1131.6618943679075	-179.30068745584626	-1131.6618943679075	36.660841730885274	0.06741717479118264	9.876273264567263E-4	4.081378675811005E-9	0.06468079821960326	-154.9866446038565	245.66849384515385	11.318552565326476	29.416962504920253	29.920126868128374	45.58491940481424	16	1	3	8	1

@@ -68,20 +68,20 @@ if (is_beast2_installed()) {
 
 ## -----------------------------------------------------------------------------
 mrca_prior <- create_mrca_prior(
-  alignment_id = get_alignment_id(fasta_filename = fasta_filename), 
+  alignment_id = get_alignment_id(fasta_filename = fasta_filename),
   taxa_names = get_taxa_names(filename = fasta_filename)[1:2],
   is_monophyletic = TRUE
 )
 
 ## -----------------------------------------------------------------------------
 mrca_distr <- create_normal_distr(
-  mean = 15.0, 
+  mean = 15.0,
   sigma = 1.0
 )
 
 ## -----------------------------------------------------------------------------
 mrca_prior <- create_mrca_prior(
-  alignment_id = get_alignment_id(fasta_filename = fasta_filename), 
+  alignment_id = get_alignment_id(fasta_filename = fasta_filename),
   taxa_names = get_taxa_names(filename = fasta_filename),
   mrca_distr = mrca_distr
 )

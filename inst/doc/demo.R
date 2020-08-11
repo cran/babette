@@ -36,7 +36,7 @@ if (is_beast2_installed()) {
   p <- ggplot(
     data = out$estimates,
     aes(x = Sample)
-  ) 
+  )
   p + geom_line(aes(y = TreeHeight), color = "green")
   p + geom_line(aes(y = YuleModel), color = "red")
   p + geom_line(aes(y = birthRate), color = "blue")
@@ -45,7 +45,7 @@ if (is_beast2_installed()) {
 ## -----------------------------------------------------------------------------
 if (is_beast2_installed()) {
   traces <- remove_burn_ins(
-    traces = out$estimates, 
+    traces = out$estimates,
     burn_in_fraction = 0.2
   )
   esses <- t(calc_esses(traces, sample_interval = sample_interval))
@@ -55,7 +55,12 @@ if (is_beast2_installed()) {
 
 ## -----------------------------------------------------------------------------
 if (is_beast2_installed()) {
-  sum_stats <- t(calc_summary_stats(traces$posterior, sample_interval = sample_interval))
+  sum_stats <- t(
+    calc_summary_stats(
+      traces$posterior,
+      sample_interval = sample_interval
+    )
+  )
   colnames(sum_stats) <- "Statistic"
   knitr::kable(sum_stats)
 }

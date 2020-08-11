@@ -5,12 +5,10 @@
 #' if these folders can be written to
 #' @inheritParams default_params_doc
 #' @examples
-#' library(testthat)
-#'
 #' # For a test inference model, the files can be prepared
 #' inference_model <- create_test_inference_model()
 #' beast2_options <- create_beast2_options()
-#' expect_silent(prepare_file_creation(inference_model, beast2_options))
+#' prepare_file_creation(inference_model, beast2_options)
 #' @export
 prepare_file_creation <- function(
   inference_model,
@@ -18,10 +16,8 @@ prepare_file_creation <- function(
 ) {
   # These are the files that need to be created
   filenames <- c(
-    inference_model$mcmc$tracelog$filename,
-    inference_model$mcmc$screenlog$filename,
-    inference_model$mcmc$treelog$filename,
-    beast2_options$output_state_filename
+    beautier::get_inference_model_filenames(inference_model),
+    beastier::get_beast2_options_filenames(beast2_options)
   )
   # Create the folders, do not warn if these already exist
   for (filename in filenames) {
@@ -31,17 +27,16 @@ prepare_file_creation <- function(
   for (filename in filename) {
     file.create(filename, showWarnings = FALSE)
     if (!file.exists(filename)) {
-      print(
-        paste0(
-          "Cannot create file '", filename, "'",
-          ", will try to gather some diagnostic info...")
+      message(
+        "Cannot create file '", filename, "'",
+        ", will try to gather some diagnostic info..."
       )
-      print(
-        paste0("Warnings when creating the folder '", dirname(filename), "'")
+      message(
+        "Warnings when creating the folder '", dirname(filename), "'"
       )
       dir.create(dirname(filename), showWarnings = TRUE, recursive = TRUE)
-      print(
-        paste0("Warnings when creating the file '", filename, "'")
+      message(
+        "Warnings when creating the file '", filename, "'"
       )
       file.create(filename, showWarnings = FALSE)
       stop(
