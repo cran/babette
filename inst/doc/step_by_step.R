@@ -4,63 +4,106 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+## ----check_empty_cache_at_start, include = FALSE------------------------------
+beautier::check_empty_beautier_folder()
+beastier::check_empty_beastier_folder()
+# beastierinstall::clear_beautier_cache() ; beastierinstall::clear_beastier_cache() # nolint
+
 ## ----load_babette, results='hide', warning=FALSE, error=FALSE, message=FALSE----
 library(babette)
 
 ## -----------------------------------------------------------------------------
-mcmc <- create_test_mcmc()
-sample_interval <- mcmc$tracelog$log_every
+inference_model <- create_inference_model()
+inference_model$mcmc$chain_length <- 10000
+inference_model$mcmc$tracelog$filename <- normalizePath(
+  get_beautier_tempfilename(
+    pattern = "tracelog_", fileext = ".log"
+  ),
+  mustWork = FALSE
+)
+inference_model$mcmc$treelog$filename <- normalizePath(
+  get_beautier_tempfilename(
+    pattern = "treelog_", fileext = ".trees"  
+  ),
+  mustWork = FALSE
+)
 
 ## -----------------------------------------------------------------------------
-beast2_input_file <- tempfile()
-create_beast2_input_file(
-  get_babette_path("anthus_aco.fas"),
-  output_filename = beast2_input_file,
-  mcmc = mcmc
+beast2_input_file <- tempfile(pattern = "beast2_", fileext = ".xml")
+create_beast2_input_file_from_model(
+  input_filename = get_babette_path("anthus_aco.fas"),
+  inference_model = inference_model,
+  output_filename = beast2_input_file
 )
-testit::assert(file.exists(beast2_input_file))
 
 ## -----------------------------------------------------------------------------
 print(head(readLines(beast2_input_file)))
 
 ## -----------------------------------------------------------------------------
 if (is_beast2_installed()) {
-  testit::assert(is_beast2_input_file(beast2_input_file))
+  is_beast2_input_file(beast2_input_file)
 }
 
 ## -----------------------------------------------------------------------------
-log_filename <- get_tracerer_path("beast2_example_output.log")
-trees_filename <- get_tracerer_path("beast2_example_output.trees")
-state_filename <- get_tracerer_path("beast2_example_output.xml.state")
-
 if (is_beast2_installed()) {
-
-  state_filename <- beastier::create_temp_state_filename()
-  run_beast2(
-    input_filename = beast2_input_file,
-    output_state_filename = state_filename
+  beast2_options <- create_beast2_options(
+    input_filename = beast2_input_file
   )
-  testit::assert(file.exists(state_filename))
+  beastier::check_can_create_file(beast2_options$output_state_filename)
+  beastier::check_can_create_treelog_file(beast2_options)
+  run_beast2_from_options(
+    beast2_options = beast2_options
+  )
+  testthat::expect_true(file.exists(beast2_options$output_state_filename))
 }
 
 ## -----------------------------------------------------------------------------
-print(head(readLines(log_filename)))
-print(tail(readLines(log_filename)))
+if (is_beast2_installed()) {
+  print(head(readLines(inference_model$mcmc$tracelog$filename)))
+  print(tail(readLines(inference_model$mcmc$tracelog$filename)))
+}
 
 ## -----------------------------------------------------------------------------
-print(head(readLines(trees_filename)))
-print(tail(readLines(trees_filename)))
+if (is_beast2_installed()) {
+  print(head(readLines(inference_model$mcmc$treelog$filename)))
+  print(tail(readLines(inference_model$mcmc$treelog$filename)))
+}
 
 ## -----------------------------------------------------------------------------
-print(head(readLines(state_filename)))
-print(tail(readLines(state_filename)))
+if (is_beast2_installed()) {
+  print(head(readLines(beast2_options$output_state_filename)))
+  print(tail(readLines(beast2_options$output_state_filename)))
+}
 
 ## -----------------------------------------------------------------------------
-knitr::kable(head(parse_beast_log(log_filename)))
+if (is_beast2_installed()) {
+  knitr::kable(head(parse_beast_tracelog_file(inference_model$mcmc$tracelog$filename)))
+}
 
 ## ----fig.width = 7, fig.height = 7--------------------------------------------
-plot_densitree(parse_beast_trees(trees_filename))
+if (is_beast2_installed()) {
+  plot_densitree(parse_beast_trees(inference_model$mcmc$treelog$filename))
+}
 
 ## -----------------------------------------------------------------------------
-knitr::kable(head(parse_beast_state_operators(state_filename)))
+if (is_beast2_installed()) {
+  knitr::kable(head(parse_beast_state_operators(beast2_options$output_state_filename)))
+}
+
+## ----cleunup, include = FALSE-------------------------------------------------
+if (is_beast2_installed()) {
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+}
+
+## ----check_empty_cache_at_end, include = FALSE--------------------------------
+unlink(
+  dirname(beastier::get_beastier_tempfilename()),
+  recursive = TRUE
+)
+beautier::check_empty_beautier_folder()
+beastier::check_empty_beastier_folder()
+# beastierinstall::clear_beautier_cache() ; beastierinstall::clear_beastier_cache() # nolint
 

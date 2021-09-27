@@ -12,49 +12,10 @@
 
 <meta name="author" content="Richèl J.C. Bilderbeek" />
 
-<meta name="date" content="2020-11-06" />
+<meta name="date" content="2021-09-26" />
 
 <title>babette: Step by Step</title>
 
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -66,7 +27,14 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -152,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -349,7 +318,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">babette: Step by Step</h1>
 <h4 class="author">Richèl J.C. Bilderbeek</h4>
-<h4 class="date">2020-11-06</h4>
+<h4 class="date">2021-09-26</h4>
 
 
 
@@ -360,19 +329,30 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>First, load <code>babette</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(babette)</a></code></pre></div>
 <p>In all cases, this is done for a short MCMC chain length of 10K:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">mcmc &lt;-<span class="st"> </span><span class="kw">create_test_mcmc</span>()</a>
-<a class="sourceLine" id="cb2-2" title="2">sample_interval &lt;-<span class="st"> </span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>log_every</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">inference_model &lt;-<span class="st"> </span><span class="kw">create_inference_model</span>()</a>
+<a class="sourceLine" id="cb2-2" title="2">inference_model<span class="op">$</span>mcmc<span class="op">$</span>chain_length &lt;-<span class="st"> </span><span class="dv">10000</span></a>
+<a class="sourceLine" id="cb2-3" title="3">inference_model<span class="op">$</span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>filename &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(</a>
+<a class="sourceLine" id="cb2-4" title="4">  <span class="kw">get_beautier_tempfilename</span>(</a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="dt">pattern =</span> <span class="st">&quot;tracelog_&quot;</span>, <span class="dt">fileext =</span> <span class="st">&quot;.log&quot;</span></a>
+<a class="sourceLine" id="cb2-6" title="6">  ),</a>
+<a class="sourceLine" id="cb2-7" title="7">  <span class="dt">mustWork =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb2-8" title="8">)</a>
+<a class="sourceLine" id="cb2-9" title="9">inference_model<span class="op">$</span>mcmc<span class="op">$</span>treelog<span class="op">$</span>filename &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(</a>
+<a class="sourceLine" id="cb2-10" title="10">  <span class="kw">get_beautier_tempfilename</span>(</a>
+<a class="sourceLine" id="cb2-11" title="11">    <span class="dt">pattern =</span> <span class="st">&quot;treelog_&quot;</span>, <span class="dt">fileext =</span> <span class="st">&quot;.trees&quot;</span>  </a>
+<a class="sourceLine" id="cb2-12" title="12">  ),</a>
+<a class="sourceLine" id="cb2-13" title="13">  <span class="dt">mustWork =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb2-14" title="14">)</a></code></pre></div>
 </div>
 <div id="create-a-beast2-input-file" class="section level2">
 <h2>Create a ‘BEAST2’ input file</h2>
 <p>This step is commonly done using BEAUti. With <code>babette</code>, this can be done as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">beast2_input_file &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">create_beast2_input_file</span>(</a>
-<a class="sourceLine" id="cb3-3" title="3">  <span class="kw">get_babette_path</span>(<span class="st">&quot;anthus_aco.fas&quot;</span>),</a>
-<a class="sourceLine" id="cb3-4" title="4">  <span class="dt">output_filename =</span> beast2_input_file,</a>
-<a class="sourceLine" id="cb3-5" title="5">  <span class="dt">mcmc =</span> mcmc</a>
-<a class="sourceLine" id="cb3-6" title="6">)</a>
-<a class="sourceLine" id="cb3-7" title="7">testit<span class="op">::</span><span class="kw">assert</span>(<span class="kw">file.exists</span>(beast2_input_file))</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">beast2_input_file &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">pattern =</span> <span class="st">&quot;beast2_&quot;</span>, <span class="dt">fileext =</span> <span class="st">&quot;.xml&quot;</span>)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">create_beast2_input_file_from_model</span>(</a>
+<a class="sourceLine" id="cb3-3" title="3">  <span class="dt">input_filename =</span> <span class="kw">get_babette_path</span>(<span class="st">&quot;anthus_aco.fas&quot;</span>),</a>
+<a class="sourceLine" id="cb3-4" title="4">  <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb3-5" title="5">  <span class="dt">output_filename =</span> beast2_input_file</a>
+<a class="sourceLine" id="cb3-6" title="6">)</a></code></pre></div>
 </div>
 <div id="display-part-of-the-beast2-input-file" class="section level2">
 <h2>Display (part of) the ‘BEAST2’ input file</h2>
@@ -386,256 +366,57 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>This file can both be loaded by BEAUti and be used by ‘BEAST2’.</p>
 <p>The file can be checked if it is indeed a valid input file:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb5-2" title="2">  testit<span class="op">::</span><span class="kw">assert</span>(<span class="kw">is_beast2_input_file</span>(beast2_input_file))</a>
+<a class="sourceLine" id="cb5-2" title="2">  <span class="kw">is_beast2_input_file</span>(beast2_input_file)</a>
 <a class="sourceLine" id="cb5-3" title="3">}</a></code></pre></div>
 </div>
 <div id="run-mcmc" class="section level2">
 <h2>Run MCMC</h2>
 <p>This step is commonly done using ‘BEAST2’ from the command-line or using its GUI. With <code>babette</code>, this can be done as follows:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">log_filename &lt;-<span class="st"> </span><span class="kw">get_tracerer_path</span>(<span class="st">&quot;beast2_example_output.log&quot;</span>)</a>
-<a class="sourceLine" id="cb6-2" title="2">trees_filename &lt;-<span class="st"> </span><span class="kw">get_tracerer_path</span>(<span class="st">&quot;beast2_example_output.trees&quot;</span>)</a>
-<a class="sourceLine" id="cb6-3" title="3">state_filename &lt;-<span class="st"> </span><span class="kw">get_tracerer_path</span>(<span class="st">&quot;beast2_example_output.xml.state&quot;</span>)</a>
-<a class="sourceLine" id="cb6-4" title="4"></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb6-6" title="6"></a>
-<a class="sourceLine" id="cb6-7" title="7">  state_filename &lt;-<span class="st"> </span>beastier<span class="op">::</span><span class="kw">create_temp_state_filename</span>()</a>
-<a class="sourceLine" id="cb6-8" title="8">  <span class="kw">run_beast2</span>(</a>
-<a class="sourceLine" id="cb6-9" title="9">    <span class="dt">input_filename =</span> beast2_input_file,</a>
-<a class="sourceLine" id="cb6-10" title="10">    <span class="dt">output_state_filename =</span> state_filename</a>
-<a class="sourceLine" id="cb6-11" title="11">  )</a>
-<a class="sourceLine" id="cb6-12" title="12">  testit<span class="op">::</span><span class="kw">assert</span>(<span class="kw">file.exists</span>(state_filename))</a>
-<a class="sourceLine" id="cb6-13" title="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb6-2" title="2">  beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>(</a>
+<a class="sourceLine" id="cb6-3" title="3">    <span class="dt">input_filename =</span> beast2_input_file</a>
+<a class="sourceLine" id="cb6-4" title="4">  )</a>
+<a class="sourceLine" id="cb6-5" title="5">  beastier<span class="op">::</span><span class="kw">check_can_create_file</span>(beast2_options<span class="op">$</span>output_state_filename)</a>
+<a class="sourceLine" id="cb6-6" title="6">  beastier<span class="op">::</span><span class="kw">check_can_create_treelog_file</span>(beast2_options)</a>
+<a class="sourceLine" id="cb6-7" title="7">  <span class="kw">run_beast2_from_options</span>(</a>
+<a class="sourceLine" id="cb6-8" title="8">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb6-9" title="9">  )</a>
+<a class="sourceLine" id="cb6-10" title="10">  testthat<span class="op">::</span><span class="kw">expect_true</span>(<span class="kw">file.exists</span>(beast2_options<span class="op">$</span>output_state_filename))</a>
+<a class="sourceLine" id="cb6-11" title="11">}</a></code></pre></div>
 </div>
 <div id="display-part-of-the-beast2-output-files" class="section level2">
 <h2>Display (part of) the ‘BEAST2’ output files</h2>
 <p>The <code>.log</code> file contains the model parameters and parameter estimates:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">print</span>(<span class="kw">head</span>(<span class="kw">readLines</span>(log_filename)))</a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt; [1] &quot;#&quot;                                                                                                                                          </span></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt; [2] &quot;#model:&quot;                                                                                                                                    </span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; [3] &quot;#&quot;                                                                                                                                          </span></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; [4] &quot;#&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot; standalone=\&quot;no\&quot;?&gt;&lt;input id=\&quot;posterior\&quot; spec=\&quot;beast.core.util.CompoundDistribution\&quot;&gt;&quot;        </span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; [5] &quot;#    &lt;distribution id=\&quot;prior\&quot; spec=\&quot;beast.core.util.CompoundDistribution\&quot;&gt;&quot;                                                             </span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; [6] &quot;#        &lt;distribution id=\&quot;BirthDeath.t:test-alignment_to_beast_posterior\&quot; spec=\&quot;beast.evolution.speciation.BirthDeathGernhard08Model\&quot;&gt;&quot;</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="kw">print</span>(<span class="kw">tail</span>(<span class="kw">readLines</span>(log_filename)))</a>
-<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; [1] &quot;5000\t-71.17163347186911\t-61.56657103682397\t-9.605062435045134\t-61.56657103682397\t0.7408031787176825\t-2.697307156062997\t1.784950391046604\t0.7085961206445538\t&quot;     </span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; [2] &quot;6000\t-69.64175919436143\t-58.7371283874309\t-10.904630806930529\t-58.7371283874309\t1.0967406331819989\t-3.996875527948392\t1.118246617131637\t0.37026052508174184\t&quot;     </span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; [3] &quot;7000\t-71.9254632299824\t-61.43600200867863\t-10.489461221303767\t-61.43600200867863\t1.008807793060718\t-3.581705942321631\t1.2610805655688475\t0.40085741953348314\t&quot;    </span></a>
-<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; [4] &quot;8000\t-69.59440660430789\t-58.893813736024974\t-10.700592868282925\t-58.893813736024974\t0.8291478974191432\t-3.7928375893007873\t0.3909075824291657\t0.5845426497411835\t&quot;</span></a>
-<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; [5] &quot;9000\t-69.69113214841606\t-62.40903887903621\t-7.2820932693798435\t-62.40903887903621\t0.4529636701249372\t-0.37433799039770677\t1.1123237661541558\t0.6983194230410139\t&quot; </span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; [6] &quot;10000\t-71.86883594126418\t-60.73520027244354\t-11.133635668820638\t-60.73520027244354\t0.7693617408342179\t-4.2258803898385\t1.5626755883603614\t0.7107459018616334\t&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb7-2" title="2">  <span class="kw">print</span>(<span class="kw">head</span>(<span class="kw">readLines</span>(inference_model<span class="op">$</span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>filename)))</a>
+<a class="sourceLine" id="cb7-3" title="3">  <span class="kw">print</span>(<span class="kw">tail</span>(<span class="kw">readLines</span>(inference_model<span class="op">$</span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>filename)))</a>
+<a class="sourceLine" id="cb7-4" title="4">}</a></code></pre></div>
 <p>The <code>.trees</code> file contains the alignment, taxa and posterior trees:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">print</span>(<span class="kw">head</span>(<span class="kw">readLines</span>(trees_filename)))</a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="co">#&gt; Warning in readLines(trees_filename): incomplete final line found</span></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="co">#&gt; on &#39;/home/richel/R/x86_64-pc-linux-gnu-library/3.6/tracerer/extdata/</span></a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="co">#&gt; beast2_example_output.trees&#39;</span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt; [1] &quot;#NEXUS&quot;               &quot;&quot;                     &quot;Begin taxa;&quot;         </span></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt; [4] &quot;\tDimensions ntax=5;&quot; &quot;\t\tTaxlabels&quot;        &quot;\t\t\tt1 &quot;</span></a>
-<a class="sourceLine" id="cb8-7" title="7"><span class="kw">print</span>(<span class="kw">tail</span>(<span class="kw">readLines</span>(trees_filename)))</a>
-<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt; Warning in readLines(trees_filename): incomplete final line found</span></a>
-<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; on &#39;/home/richel/R/x86_64-pc-linux-gnu-library/3.6/tracerer/extdata/</span></a>
-<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; beast2_example_output.trees&#39;</span></a>
-<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt; [1] &quot;tree STATE_6000 = (((1:0.6693276063477953,(3:0.03981380432299871,4:0.03981380432299871):0.6295138020247966):0.08092720614183935,5:0.7502548124896347):0.3464858206923642,2:1.0967406331819989):0.0;&quot;   </span></a>
-<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt; [2] &quot;tree STATE_7000 = (((1:0.24494355012790703,5:0.24494355012790703):0.7367914630990596,(3:0.06452243075256824,4:0.06452243075256824):0.9172125824743984):0.027072779833751337,2:1.008807793060718):0.0;&quot; </span></a>
-<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt; [3] &quot;tree STATE_8000 = (1:0.8291478974191432,((2:0.7608640351177596,5:0.7608640351177596):0.006217429452784806,(3:0.052826647942534374,4:0.052826647942534374):0.71425481662801):0.06206643284859881):0.0;&quot; </span></a>
-<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt; [4] &quot;tree STATE_9000 = (((1:0.2090056271345508,2:0.2090056271345508):0.04985571367790104,5:0.2588613408124518):0.1941023293124854,(3:0.07366441485382572,4:0.07366441485382572):0.3792992552711115):0.0;&quot;   </span></a>
-<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt; [5] &quot;tree STATE_10000 = (1:0.7693617408342179,(2:0.6138287429830985,((3:0.11136214949831788,4:0.11136214949831788):0.22798021162858859,5:0.33934236112690647):0.27448638185619206):0.1555329978511194):0.0;&quot;</span></a>
-<a class="sourceLine" id="cb8-16" title="16"><span class="co">#&gt; [6] &quot;End;&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb8-2" title="2">  <span class="kw">print</span>(<span class="kw">head</span>(<span class="kw">readLines</span>(inference_model<span class="op">$</span>mcmc<span class="op">$</span>treelog<span class="op">$</span>filename)))</a>
+<a class="sourceLine" id="cb8-3" title="3">  <span class="kw">print</span>(<span class="kw">tail</span>(<span class="kw">readLines</span>(inference_model<span class="op">$</span>mcmc<span class="op">$</span>treelog<span class="op">$</span>filename)))</a>
+<a class="sourceLine" id="cb8-4" title="4">}</a></code></pre></div>
 <p>The <code>.xml.state</code> file contains the final state of the MCMC run and the MCMC operator acceptances thus far:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">print</span>(<span class="kw">head</span>(<span class="kw">readLines</span>(state_filename)))</a>
-<a class="sourceLine" id="cb9-2" title="2"><span class="co">#&gt; [1] &quot;&lt;itsabeastystatewerein version=&#39;2.0&#39; sample=&#39;10000&#39;&gt;&quot;                                                                                                                                                                                                       </span></a>
-<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt; [2] &quot;&lt;statenode id=&#39;Tree.t:test-alignment_to_beast_posterior&#39;&gt;(0:0.7693617408342179,(1:0.6138287429830985,((2:0.11136214949831788,3:0.11136214949831788)5:0.22798021162858859,4:0.33934236112690647)7:0.27448638185619206)6:0.1555329978511194)8:0.0&lt;/statenode&gt;&quot;</span></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt; [3] &quot;&lt;statenode id=&#39;birthRate2.t:test-alignment_to_beast_posterior&#39;&gt;birthRate2.t:test-alignment_to_beast_posterior[1 1] (0.0,10000.0): 1.5626755883603614 &lt;/statenode&gt;&quot;                                                                                          </span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt; [4] &quot;&lt;statenode id=&#39;relativeDeathRate2.t:test-alignment_to_beast_posterior&#39;&gt;relativeDeathRate2.t:test-alignment_to_beast_posterior[1 1] (0.0,1.0): 0.7107459018616334 &lt;/statenode&gt;&quot;                                                                              </span></a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="co">#&gt; [5] &quot;&lt;/itsabeastystatewerein&gt;&quot;                                                                                                                                                                                                                                   </span></a>
-<a class="sourceLine" id="cb9-7" title="7"><span class="co">#&gt; [6] &quot;&lt;!--&quot;</span></a>
-<a class="sourceLine" id="cb9-8" title="8"><span class="kw">print</span>(<span class="kw">tail</span>(<span class="kw">readLines</span>(state_filename)))</a>
-<a class="sourceLine" id="cb9-9" title="9"><span class="co">#&gt; [1] &quot;{\&quot;id\&quot;:\&quot;wide.t:test-alignment_to_beast_posterior\&quot;,\&quot;p\&quot;:\&quot;NaN\&quot;,\&quot;accept\&quot;:50,\&quot;reject\&quot;:349,\&quot;acceptFC\&quot;:0,\&quot;rejectFC\&quot;:0,\&quot;rejectIv\&quot;:236,\&quot;rejectOp\&quot;:236},&quot;         </span></a>
-<a class="sourceLine" id="cb9-10" title="10"><span class="co">#&gt; [2] &quot;{\&quot;id\&quot;:\&quot;WilsonBalding.t:test-alignment_to_beast_posterior\&quot;,\&quot;p\&quot;:\&quot;NaN\&quot;,\&quot;accept\&quot;:31,\&quot;reject\&quot;:365,\&quot;acceptFC\&quot;:0,\&quot;rejectFC\&quot;:0,\&quot;rejectIv\&quot;:230,\&quot;rejectOp\&quot;:230},&quot;</span></a>
-<a class="sourceLine" id="cb9-11" title="11"><span class="co">#&gt; [3] &quot;{\&quot;id\&quot;:\&quot;BirthRateScaler.t:test-alignment_to_beast_posterior\&quot;,\&quot;p\&quot;:0.75,\&quot;accept\&quot;:347,\&quot;reject\&quot;:73,\&quot;acceptFC\&quot;:0,\&quot;rejectFC\&quot;:0,\&quot;rejectIv\&quot;:0,\&quot;rejectOp\&quot;:0},&quot;     </span></a>
-<a class="sourceLine" id="cb9-12" title="12"><span class="co">#&gt; [4] &quot;{\&quot;id\&quot;:\&quot;DeathRateScaler.t:test-alignment_to_beast_posterior\&quot;,\&quot;p\&quot;:0.75,\&quot;accept\&quot;:329,\&quot;reject\&quot;:48,\&quot;acceptFC\&quot;:0,\&quot;rejectFC\&quot;:0,\&quot;rejectIv\&quot;:3,\&quot;rejectOp\&quot;:3}&quot;      </span></a>
-<a class="sourceLine" id="cb9-13" title="13"><span class="co">#&gt; [5] &quot;]}&quot;                                                                                                                                                                        </span></a>
-<a class="sourceLine" id="cb9-14" title="14"><span class="co">#&gt; [6] &quot;--&gt;&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb9-2" title="2">  <span class="kw">print</span>(<span class="kw">head</span>(<span class="kw">readLines</span>(beast2_options<span class="op">$</span>output_state_filename)))</a>
+<a class="sourceLine" id="cb9-3" title="3">  <span class="kw">print</span>(<span class="kw">tail</span>(<span class="kw">readLines</span>(beast2_options<span class="op">$</span>output_state_filename)))</a>
+<a class="sourceLine" id="cb9-4" title="4">}</a></code></pre></div>
 </div>
 <div id="parse-output" class="section level2">
 <h2>Parse output</h2>
 <p>This step is commonly done using Tracer. With <code>babette</code>, this can be done as follows.</p>
 <p>Parsing <code>.log</code> file to obtain the parameter estimates:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(<span class="kw">parse_beast_log</span>(log_filename)))</a></code></pre></div>
-<table style="width:100%;">
-<colgroup>
-<col width="6%"></col>
-<col width="9%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="14%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="17%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="right">Sample</th>
-<th align="right">posterior</th>
-<th align="right">likelihood</th>
-<th align="right">prior</th>
-<th align="right">treeLikelihood</th>
-<th align="right">TreeHeight</th>
-<th align="right">BirthDeath</th>
-<th align="right">birthRate2</th>
-<th align="right">relativeDeathRate2</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">-76.40152</td>
-<td align="right">-66.56126</td>
-<td align="right">-9.840263</td>
-<td align="right">-66.56126</td>
-<td align="right">0.6383792</td>
-<td align="right">-2.932507</td>
-<td align="right">1.0000000</td>
-<td align="right">0.5000000</td>
-</tr>
-<tr class="even">
-<td align="right">1000</td>
-<td align="right">-68.68523</td>
-<td align="right">-60.11853</td>
-<td align="right">-8.566701</td>
-<td align="right">-60.11853</td>
-<td align="right">0.7003758</td>
-<td align="right">-1.658946</td>
-<td align="right">2.8041208</td>
-<td align="right">0.4952765</td>
-</tr>
-<tr class="odd">
-<td align="right">2000</td>
-<td align="right">-70.06839</td>
-<td align="right">-58.93807</td>
-<td align="right">-11.130319</td>
-<td align="right">-58.93807</td>
-<td align="right">1.4085182</td>
-<td align="right">-4.222564</td>
-<td align="right">0.7901276</td>
-<td align="right">0.3674313</td>
-</tr>
-<tr class="even">
-<td align="right">3000</td>
-<td align="right">-69.03990</td>
-<td align="right">-58.90834</td>
-<td align="right">-10.131561</td>
-<td align="right">-58.90834</td>
-<td align="right">0.9220334</td>
-<td align="right">-3.223806</td>
-<td align="right">1.8637476</td>
-<td align="right">0.2496224</td>
-</tr>
-<tr class="odd">
-<td align="right">4000</td>
-<td align="right">-74.15268</td>
-<td align="right">-59.98232</td>
-<td align="right">-14.170365</td>
-<td align="right">-59.98232</td>
-<td align="right">1.8159958</td>
-<td align="right">-7.262610</td>
-<td align="right">1.7823070</td>
-<td align="right">0.3519155</td>
-</tr>
-<tr class="even">
-<td align="right">5000</td>
-<td align="right">-71.17163</td>
-<td align="right">-61.56657</td>
-<td align="right">-9.605062</td>
-<td align="right">-61.56657</td>
-<td align="right">0.7408032</td>
-<td align="right">-2.697307</td>
-<td align="right">1.7849504</td>
-<td align="right">0.7085961</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb10-2" title="2">  knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(<span class="kw">parse_beast_tracelog_file</span>(inference_model<span class="op">$</span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>filename)))</a>
+<a class="sourceLine" id="cb10-3" title="3">}</a></code></pre></div>
 <p>Parsing <code>.trees</code> file to obtain the posterior phylogenies:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">plot_densitree</span>(<span class="kw">parse_beast_trees</span>(trees_filename))</a></code></pre></div>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAKgCAMAAABz4j/3AAACmlBMVEUAAAABAQECAgIDAwMEBAQGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMVFRUWFhYXFxcaGhobGxsdHR0eHh4fHx8hISEiIiIjIyMkJCQmJiYnJycoKCgpKSkqKiosLCwtLS0uLi4vLy8yMjIzMzM0NDQ1NTU2NjY3Nzc5OTk6Ojo8PDw9PT0+Pj4/Pz9BQUFCQkJDQ0NFRUVGRkZHR0dISEhJSUlLS0tMTExNTU1OTk5QUFBRUVFSUlJVVVVYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGDg4OEhISFhYWIiIiJiYmLi4uMjIyOjo6RkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2fn5+goKChoaGioqKjo6OkpKSlpaWoqKipqamrq6usrKytra2urq6wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///+QukcMAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAgAElEQVR4nO29i6Nt23nQdUqJplGaKgloHxEEsYTWgBTQkkZFxKBiRYiKWHmI4rWRIDShaYNahUpbU5LmNva2aUqT3Jv7OO+z1157vd/z/X4//xfnGPOx5nM951xrnLO/H3Rnn33WXmvtc397jPF94xvfeBACAME8uPYbAIBdgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoADRgKAA0YCgANGAoEA3PPpE9OHzv/+7fvDhWU8DggLd8LlPhuE//IFv0X/hD5/1NCAo0Amfef+HXwu//8th+NXfe9bzgKBAN3zkzdAf+qH9Y//tWU8DggItEzjS9At/i3ufhf7w5kf/rHXWs4GgQIu4prga9H79p37y7vWPRn8c/ns/+NUznxEEBdrBNRVuOR3N2Lsv/8Iv98LXPhWGv/a9P3f204KgwNlEbvL0Zr1a8prD/Obrbz552w0//tlQ/NCvUBQlnvfcIChwDthNjudYmlftIJTf+urDu9k7kZSf/uAbP/sAcV6MBIICpxK7KamKxDKS4UdfMZ9+9clyxD2dtvgqIChwPImbumOrPC1oDv6iM/z/3uZW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" /><!-- --></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb11-2" title="2">  <span class="kw">plot_densitree</span>(<span class="kw">parse_beast_trees</span>(inference_model<span class="op">$</span>mcmc<span class="op">$</span>treelog<span class="op">$</span>filename))</a>
+<a class="sourceLine" id="cb11-3" title="3">}</a></code></pre></div>
 <p>Parsing <code>.xml.state</code> file to obtain the MCMC operator acceptances:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(<span class="kw">parse_beast_state_operators</span>(state_filename)))</a></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">operator</th>
-<th align="right">p</th>
-<th align="right">accept</th>
-<th align="right">reject</th>
-<th align="right">acceptFC</th>
-<th align="right">rejectFC</th>
-<th align="right">rejectIv</th>
-<th align="right">rejectOp</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">treeScaler.t</td>
-<td align="right">0.5</td>
-<td align="right">184</td>
-<td align="right">186</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">treeRootScaler.t</td>
-<td align="right">0.5</td>
-<td align="right">144</td>
-<td align="right">224</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">63</td>
-<td align="right">63</td>
-</tr>
-<tr class="odd">
-<td align="left">UniformOperator.t</td>
-<td align="right">NaN</td>
-<td align="right">2219</td>
-<td align="right">1667</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">SubtreeSlide.t</td>
-<td align="right">1.0</td>
-<td align="right">409</td>
-<td align="right">1442</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">690</td>
-<td align="right">690</td>
-</tr>
-<tr class="odd">
-<td align="left">narrow.t</td>
-<td align="right">NaN</td>
-<td align="right">962</td>
-<td align="right">972</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">wide.t</td>
-<td align="right">NaN</td>
-<td align="right">50</td>
-<td align="right">349</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">236</td>
-<td align="right">236</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
+<a class="sourceLine" id="cb12-2" title="2">  knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(<span class="kw">parse_beast_state_operators</span>(beast2_options<span class="op">$</span>output_state_filename)))</a>
+<a class="sourceLine" id="cb12-3" title="3">}</a></code></pre></div>
 </div>
 
 

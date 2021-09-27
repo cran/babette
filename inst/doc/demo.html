@@ -12,49 +12,10 @@
 
 <meta name="author" content="Richèl J.C. Bilderbeek" />
 
-<meta name="date" content="2020-11-06" />
+<meta name="date" content="2021-09-26" />
 
 <title>babette demo</title>
 
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -66,7 +27,14 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -152,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -349,7 +318,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">babette demo</h1>
 <h4 class="author">Richèl J.C. Bilderbeek</h4>
-<h4 class="date">2020-11-06</h4>
+<h4 class="date">2021-09-26</h4>
 
 
 
@@ -368,17 +337,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li>Plot the posterior phylogenies</li>
 </ul>
 <p>In all cases, this is done for a short MCMC chain length of 10K:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">inference_model &lt;-<span class="st"> </span><span class="kw">create_test_inference_model</span>()</a>
-<a class="sourceLine" id="cb2-2" title="2">inference_model<span class="op">$</span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>filename &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
-<a class="sourceLine" id="cb2-3" title="3">inference_model<span class="op">$</span>mcmc<span class="op">$</span>treelog<span class="op">$</span>filename &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
-<a class="sourceLine" id="cb2-4" title="4">inference_model<span class="op">$</span>mcmc<span class="op">$</span>screenlog<span class="op">$</span>filename &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
-<a class="sourceLine" id="cb2-5" title="5">mcmc &lt;-<span class="st"> </span>inference_model<span class="op">$</span>mcmc</a>
-<a class="sourceLine" id="cb2-6" title="6">sample_interval &lt;-<span class="st"> </span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>log_every</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">inference_model &lt;-<span class="st"> </span><span class="kw">create_test_inference_model</span>()</a></code></pre></div>
 <p>Also, in all cases, we use the same BEAST2 options:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>(</a>
-<a class="sourceLine" id="cb3-2" title="2">  <span class="dt">input_filename =</span> <span class="kw">tempfile</span>(),</a>
-<a class="sourceLine" id="cb3-3" title="3">  <span class="dt">output_state_filename =</span> <span class="kw">tempfile</span>()</a>
-<a class="sourceLine" id="cb3-4" title="4">)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>(<span class="dt">verbose =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="let-babette-run-beast2" class="section level2">
 <h2>Let <code>babette</code> run ‘BEAST2’</h2>
@@ -389,7 +350,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb4-4" title="4">    <span class="dt">inference_model =</span> inference_model,</a>
 <a class="sourceLine" id="cb4-5" title="5">    <span class="dt">beast2_options =</span> beast2_options</a>
 <a class="sourceLine" id="cb4-6" title="6">  )</a>
-<a class="sourceLine" id="cb4-7" title="7">}</a></code></pre></div>
+<a class="sourceLine" id="cb4-7" title="7">  <span class="kw">bbt_delete_temp_files</span>(</a>
+<a class="sourceLine" id="cb4-8" title="8">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb4-9" title="9">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb4-10" title="10">  )</a>
+<a class="sourceLine" id="cb4-11" title="11">}</a></code></pre></div>
 </div>
 <div id="plot-the-posterior-estimates" class="section level2">
 <h2>Plot the posterior estimates</h2>
@@ -412,10 +377,15 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb6-3" title="3">    <span class="dt">traces =</span> out<span class="op">$</span>estimates,</a>
 <a class="sourceLine" id="cb6-4" title="4">    <span class="dt">burn_in_fraction =</span> <span class="fl">0.2</span></a>
 <a class="sourceLine" id="cb6-5" title="5">  )</a>
-<a class="sourceLine" id="cb6-6" title="6">  esses &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">calc_esses</span>(traces, <span class="dt">sample_interval =</span> sample_interval))</a>
-<a class="sourceLine" id="cb6-7" title="7">  <span class="kw">colnames</span>(esses) &lt;-<span class="st"> &quot;ESS&quot;</span></a>
-<a class="sourceLine" id="cb6-8" title="8">  knitr<span class="op">::</span><span class="kw">kable</span>(esses)</a>
-<a class="sourceLine" id="cb6-9" title="9">}</a></code></pre></div>
+<a class="sourceLine" id="cb6-6" title="6">  esses &lt;-<span class="st"> </span><span class="kw">t</span>(</a>
+<a class="sourceLine" id="cb6-7" title="7">    <span class="kw">calc_esses</span>(</a>
+<a class="sourceLine" id="cb6-8" title="8">      traces,</a>
+<a class="sourceLine" id="cb6-9" title="9">      <span class="dt">sample_interval =</span> inference_model<span class="op">$</span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>log_every</a>
+<a class="sourceLine" id="cb6-10" title="10">    )</a>
+<a class="sourceLine" id="cb6-11" title="11">  )</a>
+<a class="sourceLine" id="cb6-12" title="12">  <span class="kw">colnames</span>(esses) &lt;-<span class="st"> &quot;ESS&quot;</span></a>
+<a class="sourceLine" id="cb6-13" title="13">  knitr<span class="op">::</span><span class="kw">kable</span>(esses)</a>
+<a class="sourceLine" id="cb6-14" title="14">}</a></code></pre></div>
 <p>For a reliable inference, use an ESS of at least 200.</p>
 </div>
 <div id="show-the-summary-statistics" class="section level2">
@@ -424,7 +394,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb7-2" title="2">  sum_stats &lt;-<span class="st"> </span><span class="kw">t</span>(</a>
 <a class="sourceLine" id="cb7-3" title="3">    <span class="kw">calc_summary_stats</span>(</a>
 <a class="sourceLine" id="cb7-4" title="4">      traces<span class="op">$</span>posterior,</a>
-<a class="sourceLine" id="cb7-5" title="5">      <span class="dt">sample_interval =</span> sample_interval</a>
+<a class="sourceLine" id="cb7-5" title="5">      <span class="dt">sample_interval =</span> inference_model<span class="op">$</span>mcmc<span class="op">$</span>tracelog<span class="op">$</span>log_every</a>
 <a class="sourceLine" id="cb7-6" title="6">    )</a>
 <a class="sourceLine" id="cb7-7" title="7">  )</a>
 <a class="sourceLine" id="cb7-8" title="8">  <span class="kw">colnames</span>(sum_stats) &lt;-<span class="st"> &quot;Statistic&quot;</span></a>

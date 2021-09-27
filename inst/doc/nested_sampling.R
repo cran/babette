@@ -4,6 +4,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+## ----check_empty_cache_at_start, include = FALSE------------------------------
+beautier::check_empty_beautier_folder()
+beastier::check_empty_beastier_folder()
+
 ## -----------------------------------------------------------------------------
 library(babette)
 library(testthat)
@@ -60,25 +64,37 @@ mcmc <- beautier::create_test_ns_mcmc()
 
 ## -----------------------------------------------------------------------------
 if (is_beast2_installed() && is_beast2_pkg_installed("NS")) {
+  inference_model <- create_inference_model(
+    site_model = beautier::create_jc69_site_model(),
+    mcmc = mcmc
+  )  
+  beast2_options <- create_beast2_options(
+    beast2_path = beastier::get_default_beast2_bin_path()
+  )
   out_jc69 <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = create_inference_model(
-      site_model = beautier::create_jc69_site_model(),
-      mcmc = mcmc
-    ),
-    beast2_options = create_beast2_options(
-      beast2_path = beastier::get_default_beast2_bin_path()
-    )
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  inference_model <- create_inference_model(
+    site_model = beautier::create_gtr_site_model(),
+    mcmc = mcmc
+  )
+  beast2_options <- create_beast2_options(
+    beast2_path = beastier::get_default_beast2_bin_path()
   )
   out_gtr <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = create_inference_model(
-      site_model = beautier::create_gtr_site_model(),
-      mcmc = mcmc
-    ),
-    beast2_options = create_beast2_options(
-      beast2_path = beastier::get_default_beast2_bin_path()
-    )
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
 
@@ -97,4 +113,13 @@ if (is_beast2_installed() && is_beast2_pkg_installed("NS")) {
   bayes_factor <- exp(out_jc69$ns$marg_log_lik) / exp(out_gtr$ns$marg_log_lik)
   print(interpret_bayes_factor(bayes_factor))
 }
+
+## ----check_empty_cache_at_end, include = FALSE--------------------------------
+unlink(
+  dirname(beastier::get_beastier_tempfilename()),
+  recursive = TRUE
+)
+beautier::check_empty_beautier_folder()
+beastier::check_empty_beastier_folder()
+# beastierinstall::clear_beautier_cache() ; beastierinstall::clear_beastier_cache() # nolint
 

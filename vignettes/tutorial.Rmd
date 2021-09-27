@@ -17,6 +17,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r check_empty_cache_at_start, include = FALSE}
+beautier::check_empty_beautier_folder()
+beastier::check_empty_beastier_folder()
+```
+
 ## Introduction
 
 ![](babette_logo.png)
@@ -89,7 +94,7 @@ inference_model <- create_test_inference_model()
 names(inference_model)
 ```
 
-`mcmc` is the `bbt_run_from_model` argument to specify the MCMC run options:
+`mcmc` is the `inference_model` argument to specify the MCMC run options:
 
 ```{r}
 print(inference_model$mcmc$chain_length)
@@ -100,9 +105,15 @@ it will finish fast:
 
 ```{r cache=TRUE}
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
-   fasta_filename = fasta_filename,
-   inference_model = inference_model
+    fasta_filename = fasta_filename,
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
 ```
@@ -112,10 +123,9 @@ For this tutorial, visualizing `out` is ignored, as the 'Demo' vignette
 discusses this. 
 Instead, we will work through the other `bbt_run_from_model` parameters.
 
-## `site_models`
+## `site_model`
 
-`site_models` is the `bbt_run_from_model` argument 
-to select one or more site models.
+`site_model` is the `inference_model` parameter for a site model.
 As this tutorial works on a DNA alignment, such a site model can also
 be called a nucleotide substitution model.
 
@@ -140,17 +150,22 @@ Using this site model:
 
 ```{r cache=TRUE}
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = inference_model
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
 ```
 
-## `clock_models`
+## `clock_model`
 
-`clock_models` is the `bbt_run_from_model` argument 
-to select one or more clock models.
+`clock_models` is the `inference_model` parameter for a clock model.
 
 Picking a clock model is easy: just type:
 
@@ -173,17 +188,22 @@ Using this clock model:
 
 ```{r cache=TRUE}
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = inference_model
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
 ```
 
-## `tree_priors`
+## `tree_prior`
 
-`tree_priors` is the `bbt_run_from_model` argument 
-to select one or more tree priors.
+`tree_prior` is the `inference_model` parameter to select a tree prior.
 
 Picking a tree prior is easy: just type:
 
@@ -206,17 +226,23 @@ Using this tree prior:
 
 ```{r cache=TRUE}
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = inference_model
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
 ```
 
-## `mrca_priors`
+## `mrca_prior`
 
-`mrca_priors` is the `bbt_run_from_model` argument to add one or more Most
-Recent Common Ancestor (hence, MRCA) priors.
+`mrca_priors` is the `inference_model` parameter to use 
+a Most Recent Common Ancestor (hence, MRCA) prior.
 With such a prior, it can be specified which taxa have a shared
 common ancestor and when it existed.
 
@@ -262,14 +288,29 @@ Using such an MRCA prior:
 inference_model <- create_test_inference_model(
   mrca_prior = mrca_prior
 )
-
 ```
 
 ```{r cache=TRUE}
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = inference_model
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
+```
+
+```{r check_empty_cache_at_end, include = FALSE}
+unlink(
+  dirname(beastier::get_beastier_tempfilename()),
+  recursive = TRUE
+)
+beautier::check_empty_beautier_folder()
+beastier::check_empty_beastier_folder()
+# beastierinstall::clear_beautier_cache() ; beastierinstall::clear_beastier_cache() # nolint
 ```

@@ -12,49 +12,10 @@
 
 <meta name="author" content="Richèl J.C. Bilderbeek" />
 
-<meta name="date" content="2020-11-06" />
+<meta name="date" content="2021-09-26" />
 
 <title>babette Tutorial</title>
 
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -66,7 +27,14 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -152,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -349,7 +318,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">babette Tutorial</h1>
 <h4 class="author">Richèl J.C. Bilderbeek</h4>
-<h4 class="date">2020-11-06</h4>
+<h4 class="date">2021-09-26</h4>
 
 
 
@@ -393,21 +362,27 @@ bbt_run_from_model(
 <a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; [1] &quot;site_model&quot;        &quot;clock_model&quot;       &quot;tree_prior&quot;       </span></a>
 <a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt; [4] &quot;mrca_prior&quot;        &quot;mcmc&quot;              &quot;beauti_options&quot;   </span></a>
 <a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; [7] &quot;tipdates_filename&quot;</span></a></code></pre></div>
-<p><code>mcmc</code> is the <code>bbt_run_from_model</code> argument to specify the MCMC run options:</p>
+<p><code>mcmc</code> is the <code>inference_model</code> argument to specify the MCMC run options:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">print</span>(inference_model<span class="op">$</span>mcmc<span class="op">$</span>chain_length)</a>
 <a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt; [1] 3000</span></a></code></pre></div>
 <p>With these MCMC options, we can now call <code>bbt_run_from_model</code> in way that it will finish fast:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb8-2" title="2">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
-<a class="sourceLine" id="cb8-3" title="3">   <span class="dt">fasta_filename =</span> fasta_filename,</a>
-<a class="sourceLine" id="cb8-4" title="4">   <span class="dt">inference_model =</span> inference_model</a>
-<a class="sourceLine" id="cb8-5" title="5">  )</a>
-<a class="sourceLine" id="cb8-6" title="6">}</a></code></pre></div>
+<a class="sourceLine" id="cb8-2" title="2">  beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>()</a>
+<a class="sourceLine" id="cb8-3" title="3">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
+<a class="sourceLine" id="cb8-4" title="4">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
+<a class="sourceLine" id="cb8-5" title="5">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb8-6" title="6">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb8-7" title="7">  )</a>
+<a class="sourceLine" id="cb8-8" title="8">  <span class="kw">bbt_delete_temp_files</span>(</a>
+<a class="sourceLine" id="cb8-9" title="9">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb8-10" title="10">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb8-11" title="11">  )</a>
+<a class="sourceLine" id="cb8-12" title="12">}</a></code></pre></div>
 <p>The return value, <code>out</code> contains the results of the MCMC run. For this tutorial, visualizing <code>out</code> is ignored, as the ‘Demo’ vignette discusses this. Instead, we will work through the other <code>bbt_run_from_model</code> parameters.</p>
 </div>
-<div id="site_models" class="section level2">
-<h2><code>site_models</code></h2>
-<p><code>site_models</code> is the <code>bbt_run_from_model</code> argument to select one or more site models. As this tutorial works on a DNA alignment, such a site model can also be called a nucleotide substitution model.</p>
+<div id="site_model" class="section level2">
+<h2><code>site_model</code></h2>
+<p><code>site_model</code> is the <code>inference_model</code> parameter for a site model. As this tutorial works on a DNA alignment, such a site model can also be called a nucleotide substitution model.</p>
 <p>Picking a site model is easy: just type:</p>
 <pre><code>create_site_model_</code></pre>
 <p>This will trigger auto-complete to show all site models.</p>
@@ -417,15 +392,21 @@ bbt_run_from_model(
 <a class="sourceLine" id="cb10-3" title="3">)</a></code></pre></div>
 <p>Using this site model:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb11-2" title="2">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
-<a class="sourceLine" id="cb11-3" title="3">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
-<a class="sourceLine" id="cb11-4" title="4">    <span class="dt">inference_model =</span> inference_model</a>
-<a class="sourceLine" id="cb11-5" title="5">  )</a>
-<a class="sourceLine" id="cb11-6" title="6">}</a></code></pre></div>
+<a class="sourceLine" id="cb11-2" title="2">  beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>()</a>
+<a class="sourceLine" id="cb11-3" title="3">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
+<a class="sourceLine" id="cb11-4" title="4">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
+<a class="sourceLine" id="cb11-5" title="5">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb11-6" title="6">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb11-7" title="7">  )</a>
+<a class="sourceLine" id="cb11-8" title="8">  <span class="kw">bbt_delete_temp_files</span>(</a>
+<a class="sourceLine" id="cb11-9" title="9">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb11-10" title="10">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb11-11" title="11">  )</a>
+<a class="sourceLine" id="cb11-12" title="12">}</a></code></pre></div>
 </div>
-<div id="clock_models" class="section level2">
-<h2><code>clock_models</code></h2>
-<p><code>clock_models</code> is the <code>bbt_run_from_model</code> argument to select one or more clock models.</p>
+<div id="clock_model" class="section level2">
+<h2><code>clock_model</code></h2>
+<p><code>clock_models</code> is the <code>inference_model</code> parameter for a clock model.</p>
 <p>Picking a clock model is easy: just type:</p>
 <pre><code>create_clock_model_</code></pre>
 <p>This will trigger auto-complete to show all clock models.</p>
@@ -435,15 +416,21 @@ bbt_run_from_model(
 <a class="sourceLine" id="cb13-3" title="3">)</a></code></pre></div>
 <p>Using this clock model:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb14-2" title="2">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
-<a class="sourceLine" id="cb14-3" title="3">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
-<a class="sourceLine" id="cb14-4" title="4">    <span class="dt">inference_model =</span> inference_model</a>
-<a class="sourceLine" id="cb14-5" title="5">  )</a>
-<a class="sourceLine" id="cb14-6" title="6">}</a></code></pre></div>
+<a class="sourceLine" id="cb14-2" title="2">  beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>()</a>
+<a class="sourceLine" id="cb14-3" title="3">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
+<a class="sourceLine" id="cb14-4" title="4">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
+<a class="sourceLine" id="cb14-5" title="5">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb14-6" title="6">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb14-7" title="7">  )</a>
+<a class="sourceLine" id="cb14-8" title="8">  <span class="kw">bbt_delete_temp_files</span>(</a>
+<a class="sourceLine" id="cb14-9" title="9">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb14-10" title="10">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb14-11" title="11">  )</a>
+<a class="sourceLine" id="cb14-12" title="12">}</a></code></pre></div>
 </div>
-<div id="tree_priors" class="section level2">
-<h2><code>tree_priors</code></h2>
-<p><code>tree_priors</code> is the <code>bbt_run_from_model</code> argument to select one or more tree priors.</p>
+<div id="tree_prior" class="section level2">
+<h2><code>tree_prior</code></h2>
+<p><code>tree_prior</code> is the <code>inference_model</code> parameter to select a tree prior.</p>
 <p>Picking a tree prior is easy: just type:</p>
 <pre><code>create_tree_prior_</code></pre>
 <p>This will trigger auto-complete to show all tree priors.</p>
@@ -453,15 +440,21 @@ bbt_run_from_model(
 <a class="sourceLine" id="cb16-3" title="3">)</a></code></pre></div>
 <p>Using this tree prior:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb17-2" title="2">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
-<a class="sourceLine" id="cb17-3" title="3">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
-<a class="sourceLine" id="cb17-4" title="4">    <span class="dt">inference_model =</span> inference_model</a>
-<a class="sourceLine" id="cb17-5" title="5">  )</a>
-<a class="sourceLine" id="cb17-6" title="6">}</a></code></pre></div>
+<a class="sourceLine" id="cb17-2" title="2">  beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>()</a>
+<a class="sourceLine" id="cb17-3" title="3">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
+<a class="sourceLine" id="cb17-4" title="4">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
+<a class="sourceLine" id="cb17-5" title="5">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb17-6" title="6">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb17-7" title="7">  )</a>
+<a class="sourceLine" id="cb17-8" title="8">  <span class="kw">bbt_delete_temp_files</span>(</a>
+<a class="sourceLine" id="cb17-9" title="9">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb17-10" title="10">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb17-11" title="11">  )</a>
+<a class="sourceLine" id="cb17-12" title="12">}</a></code></pre></div>
 </div>
-<div id="mrca_priors" class="section level2">
-<h2><code>mrca_priors</code></h2>
-<p><code>mrca_priors</code> is the <code>bbt_run_from_model</code> argument to add one or more Most Recent Common Ancestor (hence, MRCA) priors. With such a prior, it can be specified which taxa have a shared common ancestor and when it existed.</p>
+<div id="mrca_prior" class="section level2">
+<h2><code>mrca_prior</code></h2>
+<p><code>mrca_priors</code> is the <code>inference_model</code> parameter to use a Most Recent Common Ancestor (hence, MRCA) prior. With such a prior, it can be specified which taxa have a shared common ancestor and when it existed.</p>
 <p>Here is how to specify that the first two taxa in a FASTA file are sister species:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">mrca_prior &lt;-<span class="st"> </span><span class="kw">create_mrca_prior</span>(</a>
 <a class="sourceLine" id="cb18-2" title="2">  <span class="dt">alignment_id =</span> <span class="kw">get_alignment_id</span>(<span class="dt">fasta_filename =</span> fasta_filename),</a>
@@ -485,11 +478,17 @@ bbt_run_from_model(
 <a class="sourceLine" id="cb21-2" title="2">  <span class="dt">mrca_prior =</span> mrca_prior</a>
 <a class="sourceLine" id="cb21-3" title="3">)</a></code></pre></div>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb22-2" title="2">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
-<a class="sourceLine" id="cb22-3" title="3">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
-<a class="sourceLine" id="cb22-4" title="4">    <span class="dt">inference_model =</span> inference_model</a>
-<a class="sourceLine" id="cb22-5" title="5">  )</a>
-<a class="sourceLine" id="cb22-6" title="6">}</a></code></pre></div>
+<a class="sourceLine" id="cb22-2" title="2">  beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>()</a>
+<a class="sourceLine" id="cb22-3" title="3">  out &lt;-<span class="st"> </span><span class="kw">bbt_run_from_model</span>(</a>
+<a class="sourceLine" id="cb22-4" title="4">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
+<a class="sourceLine" id="cb22-5" title="5">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb22-6" title="6">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb22-7" title="7">  )</a>
+<a class="sourceLine" id="cb22-8" title="8">  <span class="kw">bbt_delete_temp_files</span>(</a>
+<a class="sourceLine" id="cb22-9" title="9">    <span class="dt">inference_model =</span> inference_model,</a>
+<a class="sourceLine" id="cb22-10" title="10">    <span class="dt">beast2_options =</span> beast2_options</a>
+<a class="sourceLine" id="cb22-11" title="11">  )</a>
+<a class="sourceLine" id="cb22-12" title="12">}</a></code></pre></div>
 </div>
 
 

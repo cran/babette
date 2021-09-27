@@ -4,6 +4,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+## ----check_empty_cache_at_start, include = FALSE------------------------------
+beautier::check_empty_beautier_folder()
+beastier::check_empty_beastier_folder()
+
 ## ----load_babette-------------------------------------------------------------
 library(babette)
 
@@ -21,9 +25,15 @@ print(inference_model$mcmc$chain_length)
 
 ## ----cache=TRUE---------------------------------------------------------------
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
-   fasta_filename = fasta_filename,
-   inference_model = inference_model
+    fasta_filename = fasta_filename,
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
 
@@ -34,9 +44,15 @@ inference_model <- create_test_inference_model(
 
 ## ----cache=TRUE---------------------------------------------------------------
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = inference_model
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
 
@@ -47,9 +63,15 @@ inference_model <- create_test_inference_model(
 
 ## ----cache=TRUE---------------------------------------------------------------
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = inference_model
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
 
@@ -60,9 +82,15 @@ inference_model <- create_test_inference_model(
 
 ## ----cache=TRUE---------------------------------------------------------------
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = inference_model
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
 
@@ -91,12 +119,26 @@ inference_model <- create_test_inference_model(
   mrca_prior = mrca_prior
 )
 
-
 ## ----cache=TRUE---------------------------------------------------------------
 if (is_beast2_installed()) {
+  beast2_options <- create_beast2_options()
   out <- bbt_run_from_model(
     fasta_filename = fasta_filename,
-    inference_model = inference_model
+    inference_model = inference_model,
+    beast2_options = beast2_options
+  )
+  bbt_delete_temp_files(
+    inference_model = inference_model,
+    beast2_options = beast2_options
   )
 }
+
+## ----check_empty_cache_at_end, include = FALSE--------------------------------
+unlink(
+  dirname(beastier::get_beastier_tempfilename()),
+  recursive = TRUE
+)
+beautier::check_empty_beautier_folder()
+beastier::check_empty_beastier_folder()
+# beastierinstall::clear_beautier_cache() ; beastierinstall::clear_beastier_cache() # nolint
 

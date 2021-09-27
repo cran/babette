@@ -124,7 +124,8 @@ bbt_run_from_model <- function(
     )
   }
   testit::assert(!is.na(inference_model$mcmc$tracelog$filename))
-  testit::assert(file.exists(inference_model$mcmc$tracelog$filename) &&
+  testit::assert(
+    file.exists(normalizePath(inference_model$mcmc$tracelog$filename)) &&
     length(
       paste0(
         "'mcmc$tracelog$filename' not found. \n",
@@ -184,9 +185,13 @@ bbt_run_from_model <- function(
 
   # Process the package specific output,
   # for example, add an 'ns' atributed for Nested Sampling
-  parse_beast2_output(
+  out <- babette::parse_beast2_output(
     out = out,
     inference_model = inference_model
   )
 
+  # Cannot call babette::bbt_delete_temp_files,
+  # as 'continue_bbt_run' expects these files to be there
+
+  out
 }
