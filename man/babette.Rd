@@ -11,8 +11,13 @@ it peripheral tools. From an alignment and
 inference model, a posterior of jointly estimated
 phylogenies and parameter estimates is generated.
 }
+\note{
+the imports are created by script 'scripts/create_imports.R'
+}
 \examples{
-if (is_beast2_installed()) {
+if (beastier::is_on_ci() && is_beast2_installed()) {
+  beastier::remove_beaustier_folders()
+  beastier::check_empty_beaustier_folders()
 
   inference_model <- create_test_inference_model()
   beast2_options <- create_beast2_options()
@@ -28,7 +33,10 @@ if (is_beast2_installed()) {
     inference_model = inference_model,
     beast2_options = beast2_options
   )
+  beastier::remove_beaustier_folders()
+  beastier::check_empty_beaustier_folders()
 }
+beastier::remove_beaustier_folders()
 }
 \seealso{
 Use \link{bbt_self_test} to do verify \link{babette} is installed

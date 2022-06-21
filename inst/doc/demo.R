@@ -10,14 +10,8 @@ knitr::opts_chunk$set(
 # This vignette is tested to clean up nicely on GitHub Actions
 # and r-hub on Windows
 #
-unlink(
-  dirname(beastier::get_beastier_tempfilename()),
-  recursive = TRUE
-)
-
-beautier::check_empty_beautier_folder()
-beastier::check_empty_beastier_folder()
-# beastierinstall::clear_beautier_cache() ; beastierinstall::clear_beastier_cache() # nolint
+beastier::remove_beaustier_folders()
+beastier::check_empty_beaustier_folders()
 
 ## ----load_babette, results='hide', warning=FALSE, error=FALSE, message=FALSE----
 library(babette)
@@ -92,11 +86,6 @@ if (is_beast2_installed()) {
 # This vignette is tested to clean up nicely on GitHub Actions
 # and r-hub on Windows
 #
-unlink(
-  dirname(beastier::get_beastier_tempfilename()),
-  recursive = TRUE
-)
-beautier::check_empty_beautier_folder()
-beastier::check_empty_beastier_folder()
-# beastierinstall::clear_beautier_cache() ; beastierinstall::clear_beastier_cache() # nolint
+beastier::remove_beaustier_folders()
+beastier::check_empty_beaustier_folders()
 

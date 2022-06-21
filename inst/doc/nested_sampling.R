@@ -5,8 +5,8 @@ knitr::opts_chunk$set(
 )
 
 ## ----check_empty_cache_at_start, include = FALSE------------------------------
-beautier::check_empty_beautier_folder()
-beastier::check_empty_beastier_folder()
+beastier::remove_beaustier_folders()
+beastier::check_empty_beaustier_folders()
 
 ## -----------------------------------------------------------------------------
 library(babette)
@@ -115,11 +115,6 @@ if (is_beast2_installed() && is_beast2_pkg_installed("NS")) {
 }
 
 ## ----check_empty_cache_at_end, include = FALSE--------------------------------
-unlink(
-  dirname(beastier::get_beastier_tempfilename()),
-  recursive = TRUE
-)
-beautier::check_empty_beautier_folder()
-beastier::check_empty_beastier_folder()
-# beastierinstall::clear_beautier_cache() ; beastierinstall::clear_beastier_cache() # nolint
+beastier::remove_beaustier_folders()
+beastier::check_empty_beaustier_folders()
 

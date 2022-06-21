@@ -60,7 +60,9 @@ Do a full run: create a 'BEAST2' configuration file (like 'BEAUti 2'),
 run 'BEAST2', parse results (like 'Tracer')
 }
 \examples{
-if (is_beast2_installed()) {
+if (beastier::is_on_ci() && is_beast2_installed()) {
+  beastier::remove_beaustier_folders()
+  beastier::check_empty_beaustier_folders()
 
   # A simple FASTA file
   fasta_filename <- beautier::get_beautier_path("test_output_0.fas")
@@ -88,6 +90,8 @@ if (is_beast2_installed()) {
     inference_model = inference_model,
     beast2_options = beast2_options
   )
+  beastier::remove_beaustier_folders()
+  beastier::check_empty_beaustier_folders()
 }
 }
 \seealso{
