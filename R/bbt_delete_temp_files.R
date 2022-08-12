@@ -1,7 +1,7 @@
 #' Delete all the temporary files created by \link{bbt_run_from_model}
 #' @inheritParams default_params_doc
 #' @examples
-#' if (beastier::is_on_ci() && is_beast2_installed()) {
+#' if (beautier::is_on_ci() && is_beast2_installed()) {
 #'   beastier::remove_beaustier_folders()
 #'   beastier::check_empty_beaustier_folders()
 #'
@@ -36,13 +36,6 @@ bbt_delete_temp_files <- function(
       input_filename = beast2_options$input_filename
     )
   }
-  # beast2_options
-  # treelog_filename <- stringr::str_replace(
-  #   string = treelog_filename,
-  #   pattern = "\\$\\(tree\\)",
-  #   replacement = tree_id
-  # )
-
   screenlog_filename <- inference_model$mcmc$screenlog$filename
   screenlog_ns_filename <- stringr::str_replace(
     screenlog_filename,

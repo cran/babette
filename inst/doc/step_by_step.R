@@ -22,7 +22,8 @@ inference_model$mcmc$tracelog$filename <- normalizePath(
 )
 inference_model$mcmc$treelog$filename <- normalizePath(
   get_beautier_tempfilename(
-    pattern = "treelog_", fileext = ".trees"  
+    pattern = "treelog_",
+    fileext = ".trees"
   ),
   mustWork = FALSE
 )
@@ -76,7 +77,9 @@ if (is_beast2_installed()) {
 
 ## -----------------------------------------------------------------------------
 if (is_beast2_installed()) {
-  knitr::kable(head(parse_beast_tracelog_file(inference_model$mcmc$tracelog$filename)))
+  knitr::kable(
+    head(parse_beast_tracelog_file(inference_model$mcmc$tracelog$filename))
+  )
 }
 
 ## ----fig.width = 7, fig.height = 7--------------------------------------------
@@ -86,7 +89,9 @@ if (is_beast2_installed()) {
 
 ## -----------------------------------------------------------------------------
 if (is_beast2_installed()) {
-  knitr::kable(head(parse_beast_state_operators(beast2_options$output_state_filename)))
+  knitr::kable(
+    head(parse_beast_state_operators(beast2_options$output_state_filename))
+  )
 }
 
 ## ----cleunup, include = FALSE-------------------------------------------------

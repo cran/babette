@@ -12,7 +12,7 @@
 
 <meta name="author" content="Richèl J.C. Bilderbeek" />
 
-<meta name="date" content="2022-06-21" />
+<meta name="date" content="2022-08-12" />
 
 <title>Nested Sampling</title>
 
@@ -319,7 +319,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Nested Sampling</h1>
 <h4 class="author">Richèl J.C. Bilderbeek</h4>
-<h4 class="date">2022-06-21</h4>
+<h4 class="date">2022-08-12</h4>
 
 
 
@@ -393,7 +393,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb6-2" title="2">  inference_model &lt;-<span class="st"> </span><span class="kw">create_inference_model</span>(</a>
 <a class="sourceLine" id="cb6-3" title="3">    <span class="dt">site_model =</span> beautier<span class="op">::</span><span class="kw">create_jc69_site_model</span>(),</a>
 <a class="sourceLine" id="cb6-4" title="4">    <span class="dt">mcmc =</span> mcmc</a>
-<a class="sourceLine" id="cb6-5" title="5">  )  </a>
+<a class="sourceLine" id="cb6-5" title="5">  )</a>
 <a class="sourceLine" id="cb6-6" title="6">  beast2_options &lt;-<span class="st"> </span><span class="kw">create_beast2_options</span>(</a>
 <a class="sourceLine" id="cb6-7" title="7">    <span class="dt">beast2_path =</span> beastier<span class="op">::</span><span class="kw">get_default_beast2_bin_path</span>()</a>
 <a class="sourceLine" id="cb6-8" title="8">  )</a>
@@ -422,7 +422,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb6-31" title="31">    <span class="dt">inference_model =</span> inference_model,</a>
 <a class="sourceLine" id="cb6-32" title="32">    <span class="dt">beast2_options =</span> beast2_options</a>
 <a class="sourceLine" id="cb6-33" title="33">  )</a>
-<a class="sourceLine" id="cb6-34" title="34">}</a></code></pre></div>
+<a class="sourceLine" id="cb6-34" title="34">}</a>
+<a class="sourceLine" id="cb6-35" title="35"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 <p>I will display the marginal likelihoods in a nice table:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>() <span class="op">&amp;&amp;</span><span class="st"> </span><span class="kw">is_beast2_pkg_installed</span>(<span class="st">&quot;NS&quot;</span>)) {</a>
 <a class="sourceLine" id="cb7-2" title="2">  df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
@@ -432,11 +433,33 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb7-6" title="6">  )</a>
 <a class="sourceLine" id="cb7-7" title="7">  knitr<span class="op">::</span><span class="kw">kable</span>(df)</a>
 <a class="sourceLine" id="cb7-8" title="8">}</a></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="right">mar_log_lik</th>
+<th align="right">mar_log_lik_sd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">JC69</td>
+<td align="right">-142.5287</td>
+<td align="right">1.921124</td>
+</tr>
+<tr class="even">
+<td align="left">GTR</td>
+<td align="right">-146.1935</td>
+<td align="right">2.395289</td>
+</tr>
+</tbody>
+</table>
 <p>The Bayes factor is ratio between the marginal (non-log) likelihoods. In this case, we use the simpler JC69 model as a focus:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="cf">if</span> (<span class="kw">is_beast2_installed</span>() <span class="op">&amp;&amp;</span><span class="st"> </span><span class="kw">is_beast2_pkg_installed</span>(<span class="st">&quot;NS&quot;</span>)) {</a>
 <a class="sourceLine" id="cb8-2" title="2">  bayes_factor &lt;-<span class="st"> </span><span class="kw">exp</span>(out_jc69<span class="op">$</span>ns<span class="op">$</span>marg_log_lik) <span class="op">/</span><span class="st"> </span><span class="kw">exp</span>(out_gtr<span class="op">$</span>ns<span class="op">$</span>marg_log_lik)</a>
 <a class="sourceLine" id="cb8-3" title="3">  <span class="kw">print</span>(<span class="kw">interpret_bayes_factor</span>(bayes_factor))</a>
-<a class="sourceLine" id="cb8-4" title="4">}</a></code></pre></div>
+<a class="sourceLine" id="cb8-4" title="4">}</a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt; [1] &quot;very strong for JC69&quot;</span></a></code></pre></div>
 <p>Whatever the support is, be sure to take the error of the marginal likelihood estimation into account.</p>
 </div>
 <div id="references" class="section level2">

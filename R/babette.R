@@ -8,7 +8,7 @@
 #' phylogenies and parameter estimates is generated.
 #'
 #' @examples
-#' if (beastier::is_on_ci() && is_beast2_installed()) {
+#' if (beautier::is_on_ci() && is_beast2_installed()) {
 #'   beastier::remove_beaustier_folders()
 #'   beastier::check_empty_beaustier_folders()
 #'
@@ -415,6 +415,10 @@
 #' @importFrom beautier is_mu_param
 #' @importFrom beautier is_nested_sampling_mcmc
 #' @importFrom beautier is_normal_distr
+#' @importFrom beautier is_on_appveyor
+#' @importFrom beautier is_on_ci
+#' @importFrom beautier is_on_github_actions
+#' @importFrom beautier is_on_travis
 #' @importFrom beautier is_one_bool
 #' @importFrom beautier is_one_div_x_distr
 #' @importFrom beautier is_one_double
@@ -562,9 +566,6 @@
 #' @importFrom beastier is_beast2_installed
 #' @importFrom beastier is_bin_path
 #' @importFrom beastier is_jar_path
-#' @importFrom beastier is_on_appveyor
-#' @importFrom beastier is_on_ci
-#' @importFrom beastier is_on_travis
 #' @importFrom beastier is_win_bin_path
 #' @importFrom beastier print_beast2_options
 #' @importFrom beastier remove_beastier_folder
