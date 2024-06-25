@@ -10,7 +10,6 @@ beastier::check_empty_beaustier_folders()
 
 ## -----------------------------------------------------------------------------
 library(babette)
-library(testthat)
 
 ## -----------------------------------------------------------------------------
 out_jc69 <- create_test_bbt_run_output()
@@ -42,18 +41,19 @@ interpret_bayes_factor <- function(bayes_factor) {
     "decisive for JC69"
   }
 }
-expect_equal(interpret_bayes_factor(1 / 123.0), "decisive for GTR")
-expect_equal(interpret_bayes_factor(1 / 85.0), "very strong for GTR")
-expect_equal(interpret_bayes_factor(1 / 12.5), "strong for GTR")
-expect_equal(interpret_bayes_factor(1 / 8.5), "substantial for GTR")
-expect_equal(interpret_bayes_factor(1 / 1.5), "barely worth mentioning for GTR")
-expect_equal(interpret_bayes_factor(0.99), "barely worth mentioning for GTR")
-expect_equal(interpret_bayes_factor(1.01), "barely worth mentioning for JC69")
-expect_equal(interpret_bayes_factor(1.5), "barely worth mentioning for JC69")
-expect_equal(interpret_bayes_factor(8.5), "substantial for JC69")
-expect_equal(interpret_bayes_factor(12.5), "strong for JC69")
-expect_equal(interpret_bayes_factor(85.0), "very strong for JC69")
-expect_equal(interpret_bayes_factor(123.0), "decisive for JC69")
+# Should all be TRUE
+interpret_bayes_factor(1 / 123.0) == "decisive for GTR"
+interpret_bayes_factor(1 / 85.0) == "very strong for GTR"
+interpret_bayes_factor(1 / 12.5) == "strong for GTR"
+interpret_bayes_factor(1 / 8.5) == "substantial for GTR"
+interpret_bayes_factor(1 / 1.5) == "barely worth mentioning for GTR"
+interpret_bayes_factor(0.99) == "barely worth mentioning for GTR"
+interpret_bayes_factor(1.01) == "barely worth mentioning for JC69"
+interpret_bayes_factor(1.5) == "barely worth mentioning for JC69"
+interpret_bayes_factor(8.5) == "substantial for JC69"
+interpret_bayes_factor(12.5) == "strong for JC69"
+interpret_bayes_factor(85.0) == "very strong for JC69"
+interpret_bayes_factor(123.0) == "decisive for JC69"
 
 ## ----fig.width=7--------------------------------------------------------------
 fasta_filename <- get_babette_path("anthus_aco_sub.fas")

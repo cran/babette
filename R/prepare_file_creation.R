@@ -4,6 +4,7 @@
 #' to sub-sub-sub folders. Create those folders and test
 #' if these folders can be written to
 #' @inheritParams default_params_doc
+#' @return Nothing.
 #' @examples
 #' # This example will fail on the CRAN
 #' # r-oldrel-macos-x86_64 platform
@@ -55,7 +56,9 @@ prepare_file_creation <- function(
       )
     }
     file.remove(filename)
-    testthat::expect_true(!file.exists(filename))
+    if (file.exists(filename)) {
+      stop("filename should not exist, as it has been deleted.")
+    }
   }
   invisible(inference_model)
 }

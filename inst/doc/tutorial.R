@@ -13,8 +13,7 @@ library(babette)
 
 ## -----------------------------------------------------------------------------
 fasta_filename <- get_babette_path("anthus_aco_sub.fas")
-library(testthat)
-expect_true(file.exists(fasta_filename))
+file.exists(fasta_filename)
 
 ## -----------------------------------------------------------------------------
 inference_model <- create_test_inference_model()

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Richèl J.C. Bilderbeek" />
 
-<meta name="date" content="2023-09-26" />
+<meta name="date" content="2024-06-24" />
 
 <title>Nested Sampling</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Nested Sampling</h1>
 <h4 class="author">Richèl J.C. Bilderbeek</h4>
-<h4 class="date">2023-09-26</h4>
+<h4 class="date">2024-06-24</h4>
 
 
 
@@ -353,8 +353,7 @@ obtain the marginal likelihood and a Bayes factor, as described in
 </div>
 <div id="setup" class="section level2">
 <h2>Setup</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(babette)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(testthat)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(babette)</span></code></pre></div>
 <p><code>babette</code> needs to have ‘BEAST2’ installed to work.</p>
 <p>In the case ‘BEAST2’ is not installed, we’ll use this fabricated
 data:</p>
@@ -386,18 +385,31 @@ data:</p>
 <span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>    <span class="st">&quot;decisive for JC69&quot;</span></span>
 <span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>  }</span>
 <span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>}</span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">123.0</span>), <span class="st">&quot;decisive for GTR&quot;</span>)</span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">85.0</span>), <span class="st">&quot;very strong for GTR&quot;</span>)</span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">12.5</span>), <span class="st">&quot;strong for GTR&quot;</span>)</span>
-<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">8.5</span>), <span class="st">&quot;substantial for GTR&quot;</span>)</span>
-<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">1.5</span>), <span class="st">&quot;barely worth mentioning for GTR&quot;</span>)</span>
-<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="fl">0.99</span>), <span class="st">&quot;barely worth mentioning for GTR&quot;</span>)</span>
-<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="fl">1.01</span>), <span class="st">&quot;barely worth mentioning for JC69&quot;</span>)</span>
-<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="fl">1.5</span>), <span class="st">&quot;barely worth mentioning for JC69&quot;</span>)</span>
-<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="fl">8.5</span>), <span class="st">&quot;substantial for JC69&quot;</span>)</span>
-<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="fl">12.5</span>), <span class="st">&quot;strong for JC69&quot;</span>)</span>
-<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="fl">85.0</span>), <span class="st">&quot;very strong for JC69&quot;</span>)</span>
-<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="fu">expect_equal</span>(<span class="fu">interpret_bayes_factor</span>(<span class="fl">123.0</span>), <span class="st">&quot;decisive for JC69&quot;</span>)</span></code></pre></div>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co"># Should all be TRUE</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">123.0</span>) <span class="sc">==</span> <span class="st">&quot;decisive for GTR&quot;</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">85.0</span>) <span class="sc">==</span> <span class="st">&quot;very strong for GTR&quot;</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">12.5</span>) <span class="sc">==</span> <span class="st">&quot;strong for GTR&quot;</span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">8.5</span>) <span class="sc">==</span> <span class="st">&quot;substantial for GTR&quot;</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="fl">1.5</span>) <span class="sc">==</span> <span class="st">&quot;barely worth mentioning for GTR&quot;</span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="fl">0.99</span>) <span class="sc">==</span> <span class="st">&quot;barely worth mentioning for GTR&quot;</span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="fl">1.01</span>) <span class="sc">==</span> <span class="st">&quot;barely worth mentioning for JC69&quot;</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="fl">1.5</span>) <span class="sc">==</span> <span class="st">&quot;barely worth mentioning for JC69&quot;</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="fl">8.5</span>) <span class="sc">==</span> <span class="st">&quot;substantial for JC69&quot;</span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="fl">12.5</span>) <span class="sc">==</span> <span class="st">&quot;strong for JC69&quot;</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="fl">85.0</span>) <span class="sc">==</span> <span class="st">&quot;very strong for JC69&quot;</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="fu">interpret_bayes_factor</span>(<span class="fl">123.0</span>) <span class="sc">==</span> <span class="st">&quot;decisive for JC69&quot;</span></span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 </div>
 <div id="experiment" class="section level2">
 <h2>Experiment</h2>

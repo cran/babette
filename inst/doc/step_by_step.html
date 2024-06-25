@@ -12,7 +12,7 @@
 
 <meta name="author" content="Richèl J.C. Bilderbeek" />
 
-<meta name="date" content="2023-09-26" />
+<meta name="date" content="2024-06-24" />
 
 <title>babette: Step by Step</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">babette: Step by Step</h1>
 <h4 class="author">Richèl J.C. Bilderbeek</h4>
-<h4 class="date">2023-09-26</h4>
+<h4 class="date">2024-06-24</h4>
 
 
 
@@ -392,8 +392,7 @@ this can be done as follows:</p>
 <p>The file can be checked if it is indeed a valid input file:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_beast2_installed</span>()) {</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">is_beast2_input_file</span>(beast2_input_file)</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>}</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="run-mcmc" class="section level2">
 <h2>Run MCMC</h2>
@@ -409,8 +408,10 @@ follows:</p>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="fu">run_beast2_from_options</span>(</span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="at">beast2_options =</span> beast2_options</span>
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  )</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  testthat<span class="sc">::</span><span class="fu">expect_true</span>(<span class="fu">file.exists</span>(beast2_options<span class="sc">$</span>output_state_filename))</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(beast2_options<span class="sc">$</span>output_state_filename)) {</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;the filename should have been created.&quot;</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  }</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="display-part-of-the-beast2-output-files" class="section level2">
 <h2>Display (part of) the ‘BEAST2’ output files</h2>
@@ -419,55 +420,19 @@ parameter estimates:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_beast2_installed</span>()) {</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">head</span>(<span class="fu">readLines</span>(inference_model<span class="sc">$</span>mcmc<span class="sc">$</span>tracelog<span class="sc">$</span>filename)))</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">tail</span>(<span class="fu">readLines</span>(inference_model<span class="sc">$</span>mcmc<span class="sc">$</span>tracelog<span class="sc">$</span>filename)))</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>}</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;#&quot;                                                                                                                                  </span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; [2] &quot;#model:&quot;                                                                                                                            </span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; [3] &quot;#&quot;                                                                                                                                  </span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; [4] &quot;#&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot; standalone=\&quot;no\&quot;?&gt;&lt;input id=\&quot;posterior\&quot; spec=\&quot;beast.core.util.CompoundDistribution\&quot;&gt;&quot;</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; [5] &quot;#    &lt;distribution id=\&quot;prior\&quot; spec=\&quot;beast.core.util.CompoundDistribution\&quot;&gt;&quot;                                                     </span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; [6] &quot;#        &lt;distribution id=\&quot;YuleModel.t:anthus_aco\&quot; spec=\&quot;beast.evolution.speciation.YuleModel\&quot;&gt;&quot;                                </span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;5000\t-1761.3204192200221\t-1856.8658140026791\t95.54539478265697\t-1856.8658140026791\t0.01291079458323695\t95.54539478265697\t202.78110557637092&quot;   </span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; [2] &quot;6000\t-1761.5654059574215\t-1858.337673928368\t96.7722679709466\t-1858.337673928368\t0.013370667326241429\t96.7722679709466\t229.7380725652953&quot;       </span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; [3] &quot;7000\t-1758.7396712914406\t-1861.1877644644346\t102.44809317299416\t-1861.1877644644346\t0.009125245329688603\t102.44809317299416\t369.44907119208756&quot;</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; [4] &quot;8000\t-1766.2619613667187\t-1865.4277246825154\t99.16576331579684\t-1865.4277246825154\t0.010520208769015974\t99.16576331579684\t257.9294228628412&quot;   </span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; [5] &quot;9000\t-1760.984336956429\t-1856.231684379699\t95.24734742327003\t-1856.231684379699\t0.014481905583304693\t95.24734742327003\t253.4630847697568&quot;      </span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; [6] &quot;10000\t-1771.784990750627\t-1862.9187533221218\t91.1337625714948\t-1862.9187533221218\t0.01394547902874544\t91.1337625714948\t251.4836164360151&quot;</span></span></code></pre></div>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>}</span></code></pre></div>
 <p>The <code>.trees</code> file contains the alignment, taxa and
 posterior trees:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_beast2_installed</span>()) {</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">head</span>(<span class="fu">readLines</span>(inference_model<span class="sc">$</span>mcmc<span class="sc">$</span>treelog<span class="sc">$</span>filename)))</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">tail</span>(<span class="fu">readLines</span>(inference_model<span class="sc">$</span>mcmc<span class="sc">$</span>treelog<span class="sc">$</span>filename)))</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>}</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; Warning in readLines(inference_model$mcmc$treelog$filename): incomplete final</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; line found on &#39;/home/richel/.cache/beautier/treelog_12b0318a53e6d.trees&#39;</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;#NEXUS&quot;                &quot;&quot;                      &quot;Begin taxa;&quot;          </span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; [4] &quot;\tDimensions ntax=22;&quot; &quot;\t\tTaxlabels&quot;         &quot;\t\t\t61430_aco&quot;</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; Warning in readLines(inference_model$mcmc$treelog$filename): incomplete final</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; line found on &#39;/home/richel/.cache/beautier/treelog_12b0318a53e6d.trees&#39;</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;tree STATE_6000 = (((((((1:3.6977342405987413E-4,17:3.6977342405987413E-4):0.0010569403214262837,(3:1.3040791405877659E-4,5:1.3040791405877659E-4):0.0012963058314273814):5.286138500541656E-4,11:0.0019553275955403234):0.0019919031496889615,(9:0.0017151950198212762,22:0.0017151950198212762):0.0022320357254080087):2.2110823663423242E-4,(14:0.0026496189916270815,20:0.0026496189916270815):0.0015187199902364358):9.332625790424709E-4,(((4:7.448016694816867E-5,21:7.448016694816867E-5):1.864990836889317E-4,15:2.6097925063710037E-4):0.003286982353322925,((8:3.299820011465127E-4,13:3.299820011465127E-4):0.0012108256072855222,(16:0.0013202806592410553,19:0.0013202806592410553):2.205269491909797E-4):0.00200715399552799):0.001553639956945963):0.00826906576533544,(((2:0.0019493179864674714,7:0.0019493179864674714):0.001105416628592499,10:0.0030547346150599703):0.00419761177544435,(6:0.006083013360759853,(12:0.0021340785147390346,18:0.0021340785147390346):0.003948934846020819):0.0011693330297444671):0.0061183209357371085):0.0;&quot;</span></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; [2] &quot;tree STATE_7000 = (((((((1:2.403637311778034E-4,17:2.403637311778034E-4):9.132095500987973E-5,5:3.316846861876831E-4):5.217517027291963E-5,3:3.8385985646060275E-4):6.152448799878216E-4,11:9.991047364484244E-4):0.004073426517631093,((4:2.063205553004262E-4,15:2.063205553004262E-4):0.0022711652325245408,((8:5.883919174126987E-4,13:5.883919174126987E-4):5.196373222685158E-4,16:0.0011080292396812145):0.0013694565481437524):0.002595045466254551):5.794218486548869E-4,(9:0.004498622484643184,((14:0.0018256400336360912,20:0.0018256400336360912):4.4317044850915744E-4,21:0.0022688104821452486):0.0022298120024979353):0.0011533306180912207):0.0034732922269541987,((((2:0.00118043964362626,7:0.00118043964362626):6.871632963106977E-4,(10:3.6259067401828686E-4,19:3.6259067401828686E-4):0.001505012265918671):0.002564073313607384,6:0.004431676253544342):5.237488852222194E-5,(12:0.0022732965551788592,(18:2.4446873285717183E-4,22:2.4446873285717183E-4):0.0020288278223216873):0.0022107545868877043):0.00464119418762204):0.0;&quot;        </span></span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; [3] &quot;tree STATE_8000 = (((((((((1:8.785097155263515E-4,(3:4.0014769551964795E-4,17:4.0014769551964795E-4):4.783620200067035E-4):7.433980193647326E-6,5:8.859436957199988E-4):6.925691337040554E-4,19:0.0015785128294240542):1.3343465154504706E-4,11:0.0017119474809691013):0.0013374454184067236,(14:0.0018196989373712132,20:0.0018196989373712132):0.0012296939620046116):8.565789043614904E-4,((4:4.744296622603254E-4,15:4.744296622603254E-4):0.0026209542949752374,((8:3.373737349414038E-4,13:3.373737349414038E-4):0.001077036937384963,(16:2.865462129611004E-4,22:2.865462129611004E-4):0.0011278644593652664):0.0016809732849091957):8.105878465017526E-4):2.887970238207296E-5,9:0.003934851506119388):6.605826512717317E-4,21:0.00459543415739112):0.005924774611624854,(((2:0.003375250975568782,7:0.003375250975568782):9.058923381819262E-4,10:0.004281143313750708):0.0010573158918958181,(6:0.004282905520046269,(12:9.311553382134508E-4,18:9.311553382134508E-4):0.0033517501818328185):0.001055553685600257):0.005181749563369448):0.0;&quot;          </span></span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; [4] &quot;tree STATE_9000 = ((((((((1:6.309086385713606E-5,5:6.309086385713606E-5):1.3995493204422893E-4,17:2.03045795901365E-4):1.2532403445296723E-5,3:2.1557819934666172E-4):0.0014825152465426583,11:0.00169809344588932):0.0019257231432257304,(19:0.0017424520708144882,20:0.0017424520708144882):0.0018813645183005621):0.0019826394575953414,9:0.005606456046710392):6.306269028914383E-4,(((4:7.98921799443248E-5,15:7.98921799443248E-5):0.0033835292535314486,(((8:1.5166408093018928E-4,13:1.5166408093018928E-4):2.107705991293986E-4,22:3.624346800595879E-4):2.0124209114908537E-4,16:5.636767712086732E-4):0.0028997446622671):0.0019510025043749687,(14:0.0025856436176120027,21:0.0025856436176120027):0.0028287803202387395):8.226590117510878E-4):0.008244822633702863,((((2:0.0024865855220345674,7:0.0024865855220345674):7.569495376194089E-4,10:0.0032435350596539763):0.002576254141314131,6:0.005819789200968107):3.8627506896289805E-4,(12:0.004091106623837715,18:0.004091106623837715):0.0021149576460932906):0.008275841313373687):0.0;&quot;       </span></span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; [5] &quot;tree STATE_10000 = (((((((1:5.640509028850157E-4,5:5.640509028850157E-4):2.6680946098870555E-4,3:8.308603638737213E-4):7.295543716622958E-4,17:0.001560414735536017):0.0015705220234042607,11:0.0031309367589402778):0.004055419525075088,((((4:0.001052267323852714,15:0.001052267323852714):0.002870029885961618,22:0.003922297209814332):0.0012624457300269842,(((8:0.0014439209497470666,13:0.0014439209497470666):4.3642168197745215E-5,20:0.0014875631179448118):0.0010772639161133134,16:0.0025648270340581252):0.0026199159057831906):0.0017129867452574978,9:0.006897729685098814):2.8862659891655193E-4):9.966759454736558E-4,(14:8.193630644722192E-4,21:8.193630644722192E-4):0.007363669165016802):0.005762446799256419,((((2:0.001639597360341705,7:0.001639597360341705):4.6727057160475213E-4,19:0.002106867931946457):0.0010334622297815798,10:0.003140330161728037):0.005555889071961653,(6:0.008655743375149239,(12:0.0022180525383988115,18:0.0022180525383988115):0.006437690836750427):4.047585854045216E-5):0.00524925979505575):0.0;&quot;      </span></span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; [6] &quot;End;&quot;</span></span></code></pre></div>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>}</span></code></pre></div>
 <p>The <code>.xml.state</code> file contains the final state of the MCMC
 run and the MCMC operator acceptances thus far:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_beast2_installed</span>()) {</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">head</span>(<span class="fu">readLines</span>(beast2_options<span class="sc">$</span>output_state_filename)))</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">tail</span>(<span class="fu">readLines</span>(beast2_options<span class="sc">$</span>output_state_filename)))</span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>}</span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&lt;itsabeastystatewerein version=&#39;2.0&#39; sample=&#39;10000&#39;&gt;&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;statenode id=&#39;Tree.t:anthus_aco&#39;&gt;(((((((0:5.640509028850157E-4,4:5.640509028850157E-4)24:2.6680946098870555E-4,2:8.308603638737213E-4)36:7.295543716622958E-4,16:0.001560414735536017)34:0.0015705220234042607,10:0.0031309367589402778)31:0.004055419525075088,((((3:0.001052267323852714,14:0.001052267323852714)30:0.002870029885961618,21:0.003922297209814332)22:0.0012624457300269842,(((7:0.0014439209497470666,12:0.0014439209497470666)32:4.3642168197745215E-5,19:0.0014875631179448118)35:0.0010772639161133134,15:0.0025648270340581252)33:0.0026199159057831906)39:0.0017129867452574978,8:0.006897729685098814)28:2.8862659891655193E-4)23:9.966759454736558E-4,(13:8.193630644722192E-4,20:8.193630644722192E-4)38:0.007363669165016802)41:0.005762446799256419,((((1:0.001639597360341705,6:0.001639597360341705)25:4.6727057160475213E-4,18:0.002106867931946457)40:0.0010334622297815798,9:0.003140330161728037)29:0.005555889071961653,(5:0.008655743375149239,(11:0.0022180525383988115,17:0.0022180525383988115)27:0.006437690836750427)37:4.047585854045216E-5)26:0.00524925979505575)42:0.0&lt;/statenode&gt;&quot;</span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;statenode id=&#39;birthRate.t:anthus_aco&#39;&gt;birthRate.t:anthus_aco[1 1] (-Infinity,Infinity): 251.4836164360151 &lt;/statenode&gt;&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; [4] &quot;&lt;/itsabeastystatewerein&gt;&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; [5] &quot;&lt;!--&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </span></span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; [6] &quot;{\&quot;operators\&quot;:[&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </span></span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;{\&quot;id\&quot;:\&quot;YuleModelSubtreeSlide.t:anthus_aco\&quot;,\&quot;p\&quot;:1,\&quot;accept\&quot;:5,\&quot;reject\&quot;:2011,\&quot;acceptFC\&quot;:0,\&quot;rejectFC\&quot;:0,\&quot;rejectIv\&quot;:949,\&quot;rejectOp\&quot;:949},&quot;    </span></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; [2] &quot;{\&quot;id\&quot;:\&quot;YuleModelNarrow.t:anthus_aco\&quot;,\&quot;p\&quot;:\&quot;NaN\&quot;,\&quot;accept\&quot;:905,\&quot;reject\&quot;:1080,\&quot;acceptFC\&quot;:0,\&quot;rejectFC\&quot;:0,\&quot;rejectIv\&quot;:0,\&quot;rejectOp\&quot;:0},&quot;      </span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; [3] &quot;{\&quot;id\&quot;:\&quot;YuleModelWide.t:anthus_aco\&quot;,\&quot;p\&quot;:\&quot;NaN\&quot;,\&quot;accept\&quot;:14,\&quot;reject\&quot;:366,\&quot;acceptFC\&quot;:0,\&quot;rejectFC\&quot;:0,\&quot;rejectIv\&quot;:206,\&quot;rejectOp\&quot;:206},&quot;      </span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; [4] &quot;{\&quot;id\&quot;:\&quot;YuleModelWilsonBalding.t:anthus_aco\&quot;,\&quot;p\&quot;:\&quot;NaN\&quot;,\&quot;accept\&quot;:50,\&quot;reject\&quot;:386,\&quot;acceptFC\&quot;:0,\&quot;rejectFC\&quot;:0,\&quot;rejectIv\&quot;:67,\&quot;rejectOp\&quot;:67}&quot;</span></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; [5] &quot;]}&quot;                                                                                                                                                       </span></span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; [6] &quot;--&gt;&quot;</span></span></code></pre></div>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="parse-output" class="section level2">
 <h2>Parse output</h2>
@@ -479,98 +444,11 @@ this can be done as follows.</p>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="fu">head</span>(<span class="fu">parse_beast_tracelog_file</span>(inference_model<span class="sc">$</span>mcmc<span class="sc">$</span>tracelog<span class="sc">$</span>filename))</span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  )</span>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>}</span></code></pre></div>
-<table>
-<colgroup>
-<col width="8%" />
-<col width="11%" />
-<col width="13%" />
-<col width="11%" />
-<col width="17%" />
-<col width="13%" />
-<col width="11%" />
-<col width="11%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="right">Sample</th>
-<th align="right">posterior</th>
-<th align="right">likelihood</th>
-<th align="right">prior</th>
-<th align="right">treeLikelihood</th>
-<th align="right">TreeHeight</th>
-<th align="right">YuleModel</th>
-<th align="right">birthRate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">-6879.867</td>
-<td align="right">-6869.726</td>
-<td align="right">-10.14191</td>
-<td align="right">-6869.726</td>
-<td align="right">3.3665920</td>
-<td align="right">-10.14191</td>
-<td align="right">1.00000</td>
-</tr>
-<tr class="even">
-<td align="right">1000</td>
-<td align="right">-1918.589</td>
-<td align="right">-1991.985</td>
-<td align="right">73.39653</td>
-<td align="right">-1991.985</td>
-<td align="right">0.0268112</td>
-<td align="right">73.39653</td>
-<td align="right">47.27918</td>
-</tr>
-<tr class="odd">
-<td align="right">2000</td>
-<td align="right">-1767.270</td>
-<td align="right">-1857.064</td>
-<td align="right">89.79335</td>
-<td align="right">-1857.064</td>
-<td align="right">0.0122694</td>
-<td align="right">89.79335</td>
-<td align="right">140.42977</td>
-</tr>
-<tr class="even">
-<td align="right">3000</td>
-<td align="right">-1763.245</td>
-<td align="right">-1861.037</td>
-<td align="right">97.79241</td>
-<td align="right">-1861.037</td>
-<td align="right">0.0106426</td>
-<td align="right">97.79241</td>
-<td align="right">234.51126</td>
-</tr>
-<tr class="odd">
-<td align="right">4000</td>
-<td align="right">-1758.597</td>
-<td align="right">-1858.961</td>
-<td align="right">100.36453</td>
-<td align="right">-1858.961</td>
-<td align="right">0.0131173</td>
-<td align="right">100.36453</td>
-<td align="right">297.03691</td>
-</tr>
-<tr class="even">
-<td align="right">5000</td>
-<td align="right">-1761.320</td>
-<td align="right">-1856.866</td>
-<td align="right">95.54539</td>
-<td align="right">-1856.866</td>
-<td align="right">0.0129108</td>
-<td align="right">95.54539</td>
-<td align="right">202.78111</td>
-</tr>
-</tbody>
-</table>
 <p>Parsing <code>.trees</code> file to obtain the posterior
 phylogenies:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_beast2_installed</span>()) {</span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">plot_densitree</span>(<span class="fu">parse_beast_trees</span>(inference_model<span class="sc">$</span>mcmc<span class="sc">$</span>treelog<span class="sc">$</span>filename))</span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>}</span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>Parsing <code>.xml.state</code> file to obtain the MCMC operator
 acceptances:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_beast2_installed</span>()) {</span>
@@ -578,92 +456,6 @@ acceptances:</p>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>    <span class="fu">head</span>(<span class="fu">parse_beast_state_operators</span>(beast2_options<span class="sc">$</span>output_state_filename))</span>
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  )</span>
 <span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>}</span></code></pre></div>
-<table>
-<colgroup>
-<col width="32%" />
-<col width="6%" />
-<col width="8%" />
-<col width="8%" />
-<col width="10%" />
-<col width="10%" />
-<col width="10%" />
-<col width="10%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">operator</th>
-<th align="right">p</th>
-<th align="right">accept</th>
-<th align="right">reject</th>
-<th align="right">acceptFC</th>
-<th align="right">rejectFC</th>
-<th align="right">rejectIv</th>
-<th align="right">rejectOp</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">YuleBirthRateScaler.t</td>
-<td align="right">0.75</td>
-<td align="right">275</td>
-<td align="right">110</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">YuleModelTreeScaler.t</td>
-<td align="right">0.50</td>
-<td align="right">83</td>
-<td align="right">275</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">YuleModelTreeRootScaler.t</td>
-<td align="right">0.50</td>
-<td align="right">92</td>
-<td align="right">314</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">48</td>
-<td align="right">48</td>
-</tr>
-<tr class="even">
-<td align="left">YuleModelUniformOperator.t</td>
-<td align="right">NaN</td>
-<td align="right">2360</td>
-<td align="right">1675</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">YuleModelSubtreeSlide.t</td>
-<td align="right">1.00</td>
-<td align="right">5</td>
-<td align="right">2011</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">949</td>
-<td align="right">949</td>
-</tr>
-<tr class="even">
-<td align="left">YuleModelNarrow.t</td>
-<td align="right">NaN</td>
-<td align="right">905</td>
-<td align="right">1080</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
 </div>
 
 
